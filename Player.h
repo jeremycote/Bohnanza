@@ -8,6 +8,9 @@
 #include "string"
 
 #include "Structures/Chain.h"
+#include "Structures/Hand.h"
+
+#include "CardFactory.h"
 
 #include "Exceptions/NotEnoughCoinsException.h"
 
@@ -19,7 +22,13 @@ private:
     int coins;
     int maxNumChains;
     Chain chains[3]{};
+    Hand hand;
 public:
+
+    Player(istream& in, CardFactory factory) {
+
+    }
+
     /**
      * Create player with name
      */
@@ -92,9 +101,9 @@ public:
 
     void printHand(ostream& out, bool entireHand) {
         if (entireHand) {
-
+            out << hand << endl;
         } else {
-
+            out << hand.top() << endl;
         }
     }
 };
