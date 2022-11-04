@@ -4,18 +4,27 @@
 
 #include "Chain.h"
 
-template <typename T>
-Chain<T>& Chain<T>::operator+=( Card* ) {
-
+Chain& Chain::operator+=( Card* card) {
+    cards.push_back(card);
 }
 
-template <typename T>
-int Chain<Card>::sell() {
-    int n = cards.size();
-    return
+int Chain::sell() {
+    if (cards.size() <= 0) {
+        return 0;
+    }
+
+    Card* c = ((Card*)cards[0]);
+    //TODO: Fix this
+
+    return 0;
 }
 
-template <typename T>
-ostream& operator<<(ostream &out, const Chain<T> &chain) {
+ostream& operator<<(ostream &out, const Chain &chain) {
+    // for each card in deck
+    for_each(chain.cards.begin(), chain.cards.end(),[&out](const Card* n) {
+        // output card name
+        out << n->getName() << endl;
+    });
 
+    return out;
 }

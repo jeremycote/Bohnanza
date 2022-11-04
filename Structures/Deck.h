@@ -8,11 +8,17 @@
 #include "iostream"
 #include "vector"
 #include "../Cards/Card.h"
+#include "../CardFactory.h"
 
 using namespace std;
 
 class Deck : public vector<Card*> {
 public:
+
+    Deck(istream& in, const CardFactory* factory) {
+
+    }
+
     Card* draw() {
         // Get the last card
         Card* card = back();
@@ -30,7 +36,7 @@ ostream& operator<<(ostream& out, const Deck& deck) {
     // for each card in deck
     for_each(deck.begin(), deck.end(),[&out](const Card* n) {
         // output card name
-        out << n->getName();
+        out << n->getName() << endl;
     });
 
     return out;

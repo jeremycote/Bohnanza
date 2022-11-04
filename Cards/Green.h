@@ -7,7 +7,7 @@
 
 #include "Card.h"
 
-class Green : Card {
+class Green : public Card {
 public:
     int getCardsPerCoin(int coins) const override {
         switch (coins) {

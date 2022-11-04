@@ -11,15 +11,14 @@
 
 using namespace std;
 
-template <typename T>
 class Chain {
 private:
-    vector<T*> cards;
+    vector<Card*> cards;
 
 public:
-    Chain<T>& operator+=( Card* );
+    Chain& operator+=( Card* );
     int sell();
-    friend ostream& operator<< (ostream& out, const Chain<T>& chain);
+    friend ostream& operator<< (ostream& out, const Chain& chain);
 
 };
 
