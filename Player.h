@@ -104,6 +104,10 @@ public:
             out << hand.top() << endl;
         }
     }
+
+    Hand& getHand() {
+        return hand;
+    }
 };
 
 

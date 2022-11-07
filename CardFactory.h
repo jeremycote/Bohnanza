@@ -16,7 +16,11 @@
 #include "Cards/Garden.h"
 #include "Structures/Deck.h"
 
+#include <random>
+
 class Deck;
+
+using namespace std;
 
 #define N_CARDS 104
 #define N_BLUE 20
@@ -80,6 +84,8 @@ public:
     Deck getDeck() {
         // Instantiate deck
         Deck deck;
+
+        shuffle(cards, cards + nCards, default_random_engine(0));
 
         for (int i = 0; i < nCards; i++) {
             deck.push_back(cards[i]);

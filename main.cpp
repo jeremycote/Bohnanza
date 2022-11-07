@@ -1,10 +1,14 @@
 #include <iostream>
 #include "Player.h"
+#include "Structures/Deck.h"
+#include "CardFactory.h"
 #include <string>
 
 using namespace std;
 
 int main() {
+
+    int startingHandSize = 5;
 
     // Determine if we should resume an existing game
     bool resume;
@@ -13,6 +17,8 @@ int main() {
     cin >> resumeChar;
     cout << endl;
     resume = resumeChar == 'y';
+
+    Deck* deck;
 
     Player* p1;
     Player* p2;
@@ -32,8 +38,16 @@ int main() {
         p1 = new Player(p1Name);
         p2 = new Player(p2Name);
 
-        cout << p1->getName() << endl;
-        cout << p2->getName() << endl;
+        deck = new Deck();
+        *deck = CardFactory::getInstance()->getDeck();
+
+        for (int i = 0; i < startingHandSize; i++) {
+            p1->getHand() += deck->draw();
+            p2->getHand() += deck->draw();
+        }
+
+        p1->printHand(cout, true);
+        p2->printHand(cout, true);
     }
 
     return 0;
