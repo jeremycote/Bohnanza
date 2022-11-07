@@ -45,9 +45,11 @@ int main() {
             p1->getHand() += deck->draw();
             p2->getHand() += deck->draw();
         }
+    }
 
-        p1->printHand(cout, true);
-        p2->printHand(cout, true);
+    // Game loop. Game ends when the deck is empty.
+    while (!deck->empty()) {
+        break;
     }
 
     return 0;
