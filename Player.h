@@ -10,8 +10,6 @@
 #include "Structures/Chain.h"
 #include "Structures/Hand.h"
 
-#include "CardFactory.h"
-
 #include "Exceptions/NotEnoughCoinsException.h"
 
 using namespace std;
@@ -21,7 +19,7 @@ private:
     string name;
     int coins;
     int maxNumChains;
-    Chain chains[3]{};
+    Chain<Card*> chains[3]{};
     Hand hand;
 public:
 
@@ -76,7 +74,7 @@ public:
      * @param i
      * @return
      */
-    Chain& operator[](int i) {
+    Chain<Card*>& operator[](int i) {
         if (i < 0 || i >= maxNumChains) {
             throw out_of_range("Index is out of range!");
         }

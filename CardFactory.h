@@ -14,8 +14,9 @@
 #include "Cards/Black.h"
 #include "Cards/Red.h"
 #include "Cards/Garden.h"
-
 #include "Structures/Deck.h"
+
+class Deck;
 
 #define N_CARDS 104
 #define N_BLUE 20
@@ -35,15 +36,59 @@ private:
     Card** cards;
     int nCards = 0;
 
-    CardFactory();
+    CardFactory() {
+
+        cards = new Card*[N_CARDS];
+
+        for (int i = 0; i < N_BLUE; i++) {
+            cards[nCards] = new Blue;
+            nCards++;
+        }
+        for (int i = 0; i < N_CHILI; i++) {
+            cards[nCards] = new Chili;
+            nCards++;
+        }
+        for (int i = 0; i < N_STINK; i++) {
+            cards[nCards] = new Stink;
+            nCards++;
+        }
+        for (int i = 0; i < N_GREEN; i++) {
+            cards[nCards] = new Green;
+            nCards++;
+        }
+        for (int i = 0; i < N_SOY; i++) {
+            cards[nCards] = new Soy;
+            nCards++;
+        }
+        for (int i = 0; i < N_BLACK; i++) {
+            cards[nCards] = new Black;
+            nCards++;
+        }
+        for (int i = 0; i < N_RED; i++) {
+            cards[nCards] = new Red;
+            nCards++;
+        }
+        for (int i = 0; i < N_GARDEN; i++) {
+            cards[nCards] = new Garden;
+            nCards++;
+        }
+    }
 public:
     static CardFactory* getInstance() {
         return &instance;
     }
-    Deck getDeck();
+    Deck getDeck() {
+        // Instantiate deck
+        Deck deck;
+
+        for (int i = 0; i < nCards; i++) {
+            deck.push_back(cards[i]);
+        }
+
+        return deck;
+    }
 };
 
 CardFactory CardFactory::instance = CardFactory();
-
 
 #endif //BEANS_CARDFACTORY_H

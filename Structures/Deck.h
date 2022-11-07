@@ -7,13 +7,19 @@
 
 #include "iostream"
 #include "vector"
-#include "../Cards/Card.h"
 #include "../CardFactory.h"
+#include "../Cards/Card.h"
 
 using namespace std;
 
+class CardFactory;
+
 class Deck : public vector<Card*> {
 public:
+
+    Deck() {
+
+    }
 
     Deck(istream& in, const CardFactory* factory) {
 
