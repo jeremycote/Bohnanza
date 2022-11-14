@@ -11,6 +11,14 @@ using namespace std;
 
 int main() {
 
+    istringstream d(defaultCString);
+    Table t(d, CardFactory::getInstance());
+
+    t.saveTable(cout);
+
+    return 0;
+
+
     int startingHandSize = 5;
 
     // Determine if we should resume an existing game

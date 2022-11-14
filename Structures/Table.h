@@ -76,16 +76,18 @@ public:
 //        currentPlayer->printHand(cout, entireHand);
     }
 
-    void saveTable(ostream* out) {
-
+    void saveTable(ostream& out) {
+        out << *p1;
+        p1->printHand(out, true);
+        out << *p2;
+        p2->printHand(out, true);
+        out << *discardPile;
+        out << *tradeArea;
+        out << deck;
     }
 
     friend ostream& operator<< (ostream& out, const Table& table){
-        out << table.p1;
-        out << table.p2;
-        out << table.discardPile;
-        out << table.tradeArea;
-        out << table.deck;
+
         return out;
     }
 };

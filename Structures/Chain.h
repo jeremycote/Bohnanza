@@ -17,6 +17,7 @@ template <class T>
 class Chain {
 private:
     vector<T*> cards;
+    static const type_info& cardType;
 
 public:
 
@@ -50,10 +51,26 @@ public:
     }
     friend ostream& operator<< (ostream& out, const Chain<T>& chain)  {
 
-        out << typeid(T).name();
+        const type_info& i = typeid(T);
+        const char* name = i.name();
 
-        for(const auto& card: chain.cards) {
-            out << " " << *card;
+        if (i == cardType) {
+            out << "Card:";
+        } else {
+
+            int c = 0;
+            while (name[c] != '\0') {
+                if (c > 1) {
+                    out << name[c];
+                }
+
+                c++;
+            }
+            out << ": ";
+
+            for(const auto& card: chain.cards) {
+                out << " " << *card;
+            }
         }
 
         out << endl;
@@ -62,6 +79,9 @@ public:
     }
 
 };
+
+template <class T>
+const type_info& Chain<T>::cardType = typeid(Card);
 
 
 #endif //BEANS_CHAIN_H

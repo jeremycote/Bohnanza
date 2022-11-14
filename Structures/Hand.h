@@ -63,7 +63,7 @@ ostream& operator<<(ostream& out, const Hand& hand) {
     out << "Hand:";
 
     for(const auto& card: hand.cards) {
-        out << " " << card;
+        out << " " << *card;
     }
 
     return out << endl;

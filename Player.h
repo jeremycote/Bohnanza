@@ -115,7 +115,7 @@ public:
         if (entireHand) {
             out << *hand << endl;
         } else {
-            out << hand->top() << endl;
+            out << *hand->top() << endl;
         }
     }
 
