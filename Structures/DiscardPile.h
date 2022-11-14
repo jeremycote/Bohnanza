@@ -54,11 +54,14 @@ public:
     }
 
     void print(ostream &out) const {
-        // for each card in deck
-        for_each(cards.begin(), cards.end(), [&out](const Card *n) {
-            // output card name
-            out << n->getName() << endl;
-        });
+
+        out << "DiscardPile:";
+
+        for(const auto& card: cards) {
+            out << " " << card;
+        }
+
+        out << endl;
     }
 
     /**

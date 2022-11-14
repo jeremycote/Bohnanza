@@ -80,14 +80,14 @@ public:
 
     }
 
-    friend ostream& operator<< (ostream& out, const Table& table);
+    friend ostream& operator<< (ostream& out, const Table& table){
+        out << table.p1;
+        out << table.p2;
+        out << table.discardPile;
+        out << table.tradeArea;
+        out << table.deck;
+        return out;
+    }
 };
-
-ostream& operator<<(ostream &out, const Table &table) {
-
-
-
-    return out;
-}
 
 #endif //BEANS_TABLE_H

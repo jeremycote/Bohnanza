@@ -40,12 +40,13 @@ public:
 
 ostream& operator<<(ostream& out, const Deck& deck) {
     // for each card in deck
-    for_each(deck.begin(), deck.end(),[&out](const Card* n) {
-        // output card name
-        out << n->getName() << endl;
-    });
+    cout << "Deck:";
 
-    return out;
+    for(const auto& card: deck) {
+        out << " " << card;
+    }
+
+    return out << endl;
 }
 
 #endif //BEANS_DECK_H

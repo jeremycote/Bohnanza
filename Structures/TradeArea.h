@@ -40,11 +40,13 @@ public:
         return cards.size();
     }
 
-    friend ostream& operator<< (ostream& out, const TradeArea& tradeArea);
+    friend ostream& operator<< (ostream& out, const TradeArea& tradeArea) {
+        out << "TradeArea:";
+        for(const auto& card: tradeArea.cards) {
+            out << " " << card;
+        }
+        return out << endl;
+    }
 };
-
-ostream& operator<< (ostream& out, const TradeArea& tradeArea) {
-    return out;
-}
 
 #endif //BEANS_TRADEAREA_H

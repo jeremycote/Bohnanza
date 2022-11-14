@@ -60,13 +60,13 @@ public:
 
 ostream& operator<<(ostream& out, const Hand& hand) {
 
-    // for each card in deck
-    for_each(hand.cards.begin(), hand.cards.end(),[&out](const Card* n) {
-        // output card name
-        out << n->getName() << endl;
-    });
+    out << "Hand:";
 
-    return out;
+    for(const auto& card: hand.cards) {
+        out << " " << card;
+    }
+
+    return out << endl;
 }
 
 #endif //BEANS_HAND_H
