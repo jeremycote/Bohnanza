@@ -1,8 +1,11 @@
 #include <iostream>
+#include <sstream>
 #include "Player.h"
 #include "Structures/Deck.h"
 #include "CardFactory.h"
+#include "Structures/Table.h"
 #include <string>
+#include "Constants.h"
 
 using namespace std;
 
@@ -23,32 +26,22 @@ int main() {
     Player* p1;
     Player* p2;
 
+    Table* table;
+
     if (resume) {
 
     } else {
-        string p1Name;
-        string p2Name;
 
-        cout << "Enter P1 Name: ";
-        cin >> p1Name;
-        cout << endl << "Enter P2 Name: ";
-        cin >> p2Name;
-        cout << endl;
+        istringstream defaultStringStream(defaultCString);
 
-        p1 = new Player(p1Name);
-        p2 = new Player(p2Name);
-
-        deck = new Deck();
-        *deck = CardFactory::getInstance()->getDeck();
-
-        for (int i = 0; i < startingHandSize; i++) {
-            p1->getHand() += deck->draw();
-            p2->getHand() += deck->draw();
-        }
+        table = new Table(cin, CardFactory::getInstance());
     }
 
     // Game loop. Game ends when the deck is empty.
     while (!deck->empty()) {
+
+        // P1
+        cout << *table;
         break;
     }
 

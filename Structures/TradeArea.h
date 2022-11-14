@@ -13,7 +13,7 @@
 using namespace std;
 
 class TradeArea {
-    list<Card> cards;
+    list<Card*> cards;
 
 public:
     TradeArea() {

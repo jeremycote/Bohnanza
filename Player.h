@@ -5,7 +5,10 @@
 #ifndef BEANS_PLAYER_H
 #define BEANS_PLAYER_H
 
-#include "string"
+#include <string>
+#include <iostream>
+
+#include "Constants.h"
 
 #include "Structures/Chain.h"
 #include "Structures/Hand.h"
@@ -20,19 +23,30 @@ private:
     int coins;
     int maxNumChains;
     Chain<Card*> chains[3]{};
-    Hand hand;
+    Hand* hand;
+    static int maxNameLength;
 public:
 
-    Player(istream& in, CardFactory factory) {
+    Player(istream& in, CardFactory* factory) {
+        hand = new Hand(in, factory);
 
+        char* dest = new char[maxNameLength];
+        in.get(dest, maxNameLength, ' ');
+        name = string(dest);
     }
 
     /**
      * Create player with name
      */
-    Player(string& name) {
-        this->name = name;
+    explicit Player(string& name) {
+
+        this->name = name.length() < maxNameLength ? name : name.substr(0, maxNameLength);
+
         maxNumChains = 2;
+        coins = 0;
+
+        istringstream defaultStringStream(defaultCString);
+        hand = new Hand(defaultStringStream, CardFactory::getInstance());
     }
 
     /**
@@ -99,16 +113,27 @@ public:
 
     void printHand(ostream& out, bool entireHand) {
         if (entireHand) {
-            out << hand << endl;
+            out << *hand << endl;
         } else {
-            out << hand.top() << endl;
+            out << hand->top() << endl;
         }
     }
 
     Hand& getHand() {
-        return hand;
+        return *hand;
     }
+
+    friend ostream& operator<<(ostream& out, const Player& player);
 };
 
+int Player::maxNameLength = 10;
+
+ostream& operator<<(ostream& out, const Player& player) {
+    out << player.name << " " << player.coins << " coins " << player.maxNumChains << " chains" << endl;
+    out << player.chains[0] << endl;
+    out << player.chains[1] << endl;
+    out << player.chains[2] << endl;
+    return out;
+}
 
 #endif //BEANS_PLAYER_H

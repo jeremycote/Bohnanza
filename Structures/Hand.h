@@ -18,11 +18,6 @@ class Hand {
 private:
     list<Card*> cards;
 public:
-
-    Hand() {
-
-    }
-
     Hand(istream& in, const CardFactory* factory) {
 
     }

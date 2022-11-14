@@ -5,8 +5,9 @@
 #ifndef BEANS_CHAIN_H
 #define BEANS_CHAIN_H
 
-#include "iostream"
-#include "vector"
+#include <iostream>
+#include <vector>
+#include <typeinfo>
 #include "../Cards/Card.h"
 #include "../CardFactory.h"
 
@@ -19,15 +20,22 @@ private:
 
 public:
 
-    Chain() {
-
+    Chain<T>() {
     }
 
-    Chain(istream&, const CardFactory*) {
+    Chain<T>(istream&, const CardFactory*) {
 
     }
-    Chain<T>& operator+=( Card* card) {
-        cards.push_back(card);
+    Chain<T>& operator+=(Card* card) {
+
+        T* c = dynamic_cast<T*>(card);
+
+        if (c == nullptr) {
+            throw bad_cast();
+        }
+
+        cards.push_back(c);
+        return *this;
     }
 
     int sell() {
@@ -40,27 +48,20 @@ public:
 
         return 0;
     }
+    friend ostream& operator<< (ostream& out, const Chain<T>& chain)  {
 
-    friend ostream& operator<< (ostream& out, const Chain& chain);
+        out << typeid(T).name();
+
+        for(const auto& card: chain.cards) {
+            out << " " << *card;
+        }
+
+        out << endl;
+
+        return out;
+    }
 
 };
-
-template <class T>
-ostream& operator<<(ostream &out, const Chain<T> &chain) {
-
-//    Card* type = T();
-//    out << type->getName() << "    ";
-
-    // for each card in deck
-    for_each(chain.cards.begin(), chain.cards.end(),[&out](const Card* n) {
-        // output card name
-        out << " " << n->getName();
-    });
-
-    out << endl;
-
-    return out;
-}
 
 
 #endif //BEANS_CHAIN_H
