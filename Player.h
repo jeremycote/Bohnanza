@@ -130,9 +130,9 @@ int Player::maxNameLength = 10;
 
 ostream& operator<<(ostream& out, const Player& player) {
     out << player.name << " " << player.coins << " coins " << player.maxNumChains << " chains" << endl;
-    out << player.chains[0] << endl;
-    out << player.chains[1] << endl;
-    out << player.chains[2] << endl;
+    out << player.chains[0];
+    out << player.chains[1];
+    out << player.chains[2];
     return out;
 }
 
