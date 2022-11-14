@@ -51,6 +51,8 @@ public:
             }
 
             discardPile = new DiscardPile(in, CardFactory::getInstance());
+
+            tradeArea = new TradeArea(in, CardFactory::getInstance());
 //        } else {
 //        }
     }
@@ -81,7 +83,7 @@ public:
         p1->printHand(out, true);
         out << *p2;
         p2->printHand(out, true);
-        out << *discardPile;
+        discardPile->print(out);
         out << *tradeArea;
         out << deck;
     }

@@ -16,10 +16,6 @@ class TradeArea {
     list<Card*> cards;
 
 public:
-    TradeArea() {
-
-    }
-
     TradeArea(istream&, const CardFactory*) {
 
     }
@@ -42,9 +38,13 @@ public:
 
     friend ostream& operator<< (ostream& out, const TradeArea& tradeArea) {
         out << "TradeArea:";
-        for(const auto& card: tradeArea.cards) {
-            out << " " << card;
+
+        if (!tradeArea.cards.empty()) {
+            for(const auto& card: tradeArea.cards) {
+                out << " " << *card;
+            }
         }
+
         return out << endl;
     }
 };
