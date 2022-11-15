@@ -52,6 +52,12 @@ build CMakeFiles/Beans.dir/main.cpp.o: CXX_COMPILER__Beans_Debug /Users/jeremyco
   OBJECT_DIR = CMakeFiles/Beans.dir
   OBJECT_FILE_DIR = CMakeFiles/Beans.dir
 
+build CMakeFiles/Beans.dir/CardFactory.cpp.o: CXX_COMPILER__Beans_Debug /Users/jeremycote/Projects/C++/CSI2772/Beans/CardFactory.cpp || cmake_object_order_depends_target_Beans
+  DEP_FILE = CMakeFiles/Beans.dir/CardFactory.cpp.o.d
+  FLAGS = -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.0.sdk -mmacosx-version-min=12.6 -std=gnu++14
+  OBJECT_DIR = CMakeFiles/Beans.dir
+  OBJECT_FILE_DIR = CMakeFiles/Beans.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target Beans
@@ -60,7 +66,7 @@ build CMakeFiles/Beans.dir/main.cpp.o: CXX_COMPILER__Beans_Debug /Users/jeremyco
 #############################################
 # Link the executable Beans
 
-build Beans: CXX_EXECUTABLE_LINKER__Beans_Debug CMakeFiles/Beans.dir/main.cpp.o
+build Beans: CXX_EXECUTABLE_LINKER__Beans_Debug CMakeFiles/Beans.dir/main.cpp.o CMakeFiles/Beans.dir/CardFactory.cpp.o
   FLAGS = -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.0.sdk -mmacosx-version-min=12.6
   OBJECT_DIR = CMakeFiles/Beans.dir
   POST_BUILD = :
