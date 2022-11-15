@@ -29,8 +29,12 @@ public:
     /**
      * Constructor for creating an empty table
      */
-    Table(Deck *deck) {
+    Table(Player *p1, Player *p2, Deck *deck, DiscardPile* discard, TradeArea *tradeArea) {
+        this->p1 = p1;
+        this->p2 = p2;
         this->deck = deck;
+        this->discardPile = discard;
+        this->tradeArea = tradeArea;
     }
 
     /**
@@ -38,35 +42,15 @@ public:
      * @param in
      */
     Table(istream& in, const CardFactory* factory) {
-        char line[256];
-        in.getline(line, 256);
 
-        // Compare if first line of input stream is default string
-//        if (strcmp(line, defaultCString) == 0) {
-            string p1Name;
-            string p2Name;
+    }
 
-            cout << "Enter P1 Name: ";
-            cin >> p1Name;
-            cout << endl << "Enter P2 Name: ";
-            cin >> p2Name;
-            cout << endl;
-
-            p1 = new Player(p1Name);
-            p2 = new Player(p2Name);
-
-            deck = new Deck(CardFactory::getInstance()->getDeck());
-
-            for (int i = 0; i < startingHandSize; i++) {
-                p1->getHand() += deck->draw();
-                p2->getHand() += deck->draw();
-            }
-
-            discardPile = new DiscardPile(in, CardFactory::getInstance());
-
-            tradeArea = new TradeArea(in, CardFactory::getInstance());
-//        } else {
-//        }
+    Table(istream& in, const CardFactory* factory, Player *p1, Player *p2, Deck *deck, DiscardPile* discard, TradeArea *tradeArea) : Table(in, factory) {
+        this->p1 = p1;
+        this->p2 = p2;
+        this->deck = deck;
+        this->discardPile = discard;
+        this->tradeArea = tradeArea;
     }
 
     /**

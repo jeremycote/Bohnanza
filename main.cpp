@@ -36,17 +36,43 @@ int main() {
 
     if (resume) {
         // Resume a game by using istream constructors
-
+        players[0] = Player(cin, CardFactory::getInstance());
+        players[1] = Player(cin, CardFactory::getInstance());
+        deck = Deck(cin, CardFactory::getInstance());
+        discard = DiscardPile(cin, CardFactory::getInstance());
+        tradeArea = TradeArea(cin, CardFactory::getInstance());
+        table = Table(cin, CardFactory::getInstance(), &players[0], &players[1], &deck, &discard, &tradeArea);
     } else {
+
+        string p1Name;
+        string p2Name;
+
+        cout << "Enter P1 Name: ";
+        cin >> p1Name;
+        cout << endl << "Enter P2 Name: ";
+        cin >> p2Name;
+        cout << endl;
+
+        players[0] = Player(p1Name);
+        players[1] = Player(p2Name);
+
         // Start a new game by using default constructors
         deck = CardFactory::getInstance()->getDeck();
-        table = Table(&deck);
+        table = Table(&players[0], &players[1], &deck, &discard, &tradeArea);
     }
 
     // Game loop. Game ends when the deck is empty.
     while (!deck.empty()) {
 
         // TODO: Ask to pause game
+        if (false) {
+            cout << players[0];
+            cout << players[1];
+            cout << deck;
+            cout << discard;
+            cout << tradeArea;
+            cout << table;
+        }
 
         // For each player
         for (int i = 0; i < nPlayers; i++) {
