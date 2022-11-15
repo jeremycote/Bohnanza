@@ -27,6 +27,7 @@ public:
     Chain<T>(istream&, const CardFactory*) {
 
     }
+
     Chain<T>& operator+=(Card* card) {
 
         T* c = dynamic_cast<T*>(card);

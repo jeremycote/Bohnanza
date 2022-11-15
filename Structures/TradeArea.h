@@ -16,6 +16,16 @@ class TradeArea {
     list<Card*> cards;
 
 public:
+    /**
+     * Constructor for creating an empty trade area
+     */
+    TradeArea() {
+
+    }
+
+    /**
+     * Constructor for creating a trade area from istream
+     */
     TradeArea(istream&, const CardFactory*) {
 
     }

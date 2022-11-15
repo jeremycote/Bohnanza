@@ -20,12 +20,24 @@ private:
     Player *p1;
     Player *p2;
 
-    Deck deck;
+    Deck *deck;
     DiscardPile *discardPile;
     TradeArea *tradeArea;
 
 public:
-    Table(istream& in, const CardFactory*) {
+
+    /**
+     * Constructor for creating an empty table
+     */
+    Table(Deck *deck) {
+        this->deck = deck;
+    }
+
+    /**
+     * Constructor for creating a table from istream
+     * @param in
+     */
+    Table(istream& in, const CardFactory* factory) {
         char line[256];
         in.getline(line, 256);
 
@@ -43,11 +55,11 @@ public:
             p1 = new Player(p1Name);
             p2 = new Player(p2Name);
 
-            deck = CardFactory::getInstance()->getDeck();
+            deck = new Deck(CardFactory::getInstance()->getDeck());
 
             for (int i = 0; i < startingHandSize; i++) {
-                p1->getHand() += deck.draw();
-                p2->getHand() += deck.draw();
+                p1->getHand() += deck->draw();
+                p2->getHand() += deck->draw();
             }
 
             discardPile = new DiscardPile(in, CardFactory::getInstance());
@@ -58,13 +70,25 @@ public:
     }
 
     /**
+     * Copy constructor
+     * @param o
+     */
+    Table(Table& o) {
+        p1 = o.p1;
+        p2 = o.p2;
+        deck = o.deck;
+        discardPile = o.discardPile;
+        tradeArea = o.tradeArea;
+    }
+
+    /**
      * Check if deck is empty and player has more coins than adversary.
      * Returns true only if deck is empty and player has more coins than opponent.
      * @param playerName
      * @return
      */
     bool win(string& playerName) {
-        if (deck.empty() && p1->getNumCoins() != p2->getNumCoins()) {
+        if (deck->empty() && p1->getNumCoins() != p2->getNumCoins()) {
 
             Player *winner = p1->getNumCoins() > p2->getNumCoins() ? p1 : p2;
 
@@ -85,12 +109,16 @@ public:
         p2->printHand(out, true);
         discardPile->print(out);
         out << *tradeArea;
-        out << deck;
+        out << *deck;
     }
 
     friend ostream& operator<< (ostream& out, const Table& table){
 
         return out;
+    }
+
+    Table() {
+
     }
 };
 

@@ -17,10 +17,18 @@ class CardFactory;
 class Deck : public vector<Card*> {
 public:
 
+    /**
+     * Constructor for creating a new deck
+     */
     Deck() {
 
     }
 
+    /**
+     * Constructor for creating a deck from istream
+     * @param in
+     * @param factory
+     */
     Deck(istream& in, const CardFactory* factory) {
 
     }
@@ -43,7 +51,7 @@ ostream& operator<<(ostream& out, const Deck& deck) {
     cout << "Deck:";
 
     for(const auto& card: deck) {
-        out << " " << card;
+        out << " " << *card;
     }
 
     return out << endl;

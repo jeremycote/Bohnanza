@@ -5,6 +5,8 @@
 #ifndef BEANS_CARDFACTORY_H
 #define BEANS_CARDFACTORY_H
 
+#include "Constants.h"
+
 #include "Cards/Card.h"
 #include "Cards/Blue.h"
 #include "Cards/Chili.h"
@@ -83,7 +85,9 @@ public:
     }
     Deck getDeck() {
         // Instantiate deck
-        Deck deck;
+
+        istringstream d(defaultCString);
+        Deck deck(d, this);
 
         shuffle(cards, cards + nCards, default_random_engine(0));
 

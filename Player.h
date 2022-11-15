@@ -22,11 +22,23 @@ private:
     string name;
     int coins;
     int maxNumChains;
-    Chain<Card*> chains[3]{};
+    Chain<Card> chains[3]{};
     Hand* hand;
     static int maxNameLength;
 public:
 
+    /**
+     * Constructor for creating a new player
+     */
+    Player() {
+
+    }
+
+    /**
+     * Constructor for creating a player from an istream
+     * @param in
+     * @param factory
+     */
     Player(istream& in, CardFactory* factory) {
         hand = new Hand(in, factory);
 
@@ -88,7 +100,7 @@ public:
      * @param i
      * @return
      */
-    Chain<Card*>& operator[](int i) {
+    Chain<Card>& operator[](int i) {
         if (i < 0 || i >= maxNumChains) {
             throw out_of_range("Index is out of range!");
         }

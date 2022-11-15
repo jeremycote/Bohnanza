@@ -17,6 +17,18 @@ private:
     vector<Card *> cards;
 public:
 
+    /**
+     * Constructor for creating an empty discard pile
+     */
+    DiscardPile() {
+
+    }
+
+    /**
+     * Constructor for creating a discard pile from istream
+     * @param in
+     * @param factory
+     */
     DiscardPile(istream& in, const CardFactory* factory) {
 
     }

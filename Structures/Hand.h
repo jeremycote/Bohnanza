@@ -18,6 +18,19 @@ class Hand {
 private:
     list<Card*> cards;
 public:
+
+    /**
+     * Constructor for creating an empty hand
+     */
+    Hand() {
+
+    }
+
+    /**
+     * Constructor for creating a hand from an istream
+     * @param in
+     * @param factory
+     */
     Hand(istream& in, const CardFactory* factory) {
 
     }
