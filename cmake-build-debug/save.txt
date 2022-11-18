@@ -6,4 +6,5 @@ Jeremy 1 coins
 Blue: Blue Blue Blue
 Card:
 Card:
-Deck: Blue Garden Soy Chili Black Red Soy Stink Stink Black Blue Blue Stink Green Chili Blue Blue Garden Soy Garden Soy Stink Stink Chili Blue Black Black Chili Blue Red Blue Blue Blue Soy Chili Blue Soy Chili Green Stink Green Green Stink Blue Chili Black Blue Stink Green Soy Stink Black Blue Chili Blue Chili Green Blue Garden Red Stink Chili Green Soy Chili Stink Soy Chili Soy Black Stink Green Black Chili Garden Chili Garden Chili Red Black Soy Soy Green Black Stink Chili Red Chili Green Red Chili Red Green Green Green Blue Red Green
+Deck: Blue Garden Chili Soy Stink Stink Black Blue Blue Stink Green Chili Blue Blue Garden Soy Garden Soy Stink Stink Chili Blue Black Black Chili Blue Red Blue Blue Blue Soy Chili Blue Soy Chili Green Stink Green Green Stink Blue Chili Black Blue Stink Green Soy Stink Black Blue Chili Blue Chili Green Blue Garden Red Stink Chili Green Soy Chili Stink Soy Chili Soy Black Stink Green Black Chili Garden Chili Garden Chili Red Black Soy Soy Green Black Stink Chili Red Chili Green Red Chili Red Green Green Green Blue Red Green
+DiscardPile: Soy Red Black
