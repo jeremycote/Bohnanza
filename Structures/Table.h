@@ -34,10 +34,15 @@ public:
         string p1Name;
         string p2Name;
 
+        cin.ignore();
+
         cout << "Enter P1 Name: ";
-        cin >> p1Name;
+        getline(cin, p1Name);
+        cout << endl;
+
+
         cout << endl << "Enter P2 Name: ";
-        cin >> p2Name;
+        getline(cin, p2Name);
         cout << endl;
 
         p1 = Player(p1Name);
@@ -47,6 +52,11 @@ public:
         deck = CardFactory::getInstance()->getDeck();
         discardPile = DiscardPile();
         tradeArea = TradeArea();
+
+        for (int i = 0; i < 5; i++) {
+            p1.getHand() += deck.draw();
+            p2.getHand() += deck.draw();
+        }
     }
 
     /**

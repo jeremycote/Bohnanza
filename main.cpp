@@ -24,23 +24,10 @@ bool askYesNo(string question) {
 
 int main() {
 
-    // Determine if we should resume an existing game
-    /*
-    bool resume;
-    char resumeChar;
-    cout << "Would you like to resume an existing game (yes/no): ";
-    cin >> resumeChar;
-    cout << endl;
-    resume = resumeChar == 'y';
-     */
-
-    bool resume = true;
-
     Table* table;
 
-    if (resume) {
-
-        cout << "Enter savefile name: ";
+    if (askYesNo("Would you like to resume an existing game?")) {
+        cout << "Enter save file name: ";
         string filename;
         cin >> filename;
 
@@ -80,9 +67,14 @@ int main() {
             cout << *table;
 
             // Player draws top card from deck
-            Card* card = deck->draw();
-            cout << players[i]->getName() << " drew a " << card->getName() << endl;
-            players[i]->getHand() += card;
+            try {
+                Card* card = deck->draw();
+                cout << players[i]->getName() << " drew a " << card->getName() << endl;
+                players[i]->getHand() += card;
+            } catch (DeckEmptyException& e) {
+                cout << "Warning. Deck is empty" << endl;
+            }
+
 
             // Display hand
             players[i]->printHand(cout, true);
@@ -93,6 +85,12 @@ int main() {
             }
 
             for (int play = 0; play < 2; play++) {
+
+                if (players[i]->getHand().size() == 0) {
+                    cout << "Skipping planting phase. Hand is empty." << endl;
+                    break;
+                }
+
                 cout << "Next card to play is: ";
                 players[i]->printHand(cout, false);
 
@@ -217,7 +215,7 @@ int main() {
     } else {
         cout << players[winner]->getName() << " wins!" << endl;
         for (auto & player : players) {
-            cout << player->getName() << " has " << player->getNumCoins() << " coins.";
+            cout << player->getName() << " has " << player->getNumCoins() << " coins." << endl;
         }
     }
 

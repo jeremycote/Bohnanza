@@ -1,0 +1,13 @@
+Monique 2 coins 3 chains
+Card:
+Stink: Stink Stink Stink
+Card:
+Hand: Stink Soy
+Jeremy 1 coins 2 chains
+Blue: Blue Blue Blue
+Card:
+Card:
+Hand: Red
+Deck: Blue Garden Stink Black Blue Blue Stink Green Chili Blue Blue Garden Garden Stink Stink Chili Blue Black Black Chili Blue Blue Blue Blue Soy Chili Blue Soy Chili Green Stink Green Green Stink Blue Chili Black Blue Stink Green Soy Stink Black Blue Chili Blue Chili Green Blue Garden Red Stink Chili Green Soy Chili Stink Soy Chili Soy Black Stink Green Black Chili Garden Chili Garden Chili Red Black Soy Soy Green Black Stink Chili Red Chili Green Red Chili Red Green Green Green Blue Red Green
+DiscardPile: Soy Red Black
+TradeArea: Soy Soy Chili

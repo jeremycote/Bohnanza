@@ -198,7 +198,7 @@ public:
     void printHand(ostream& out, bool entireHand) {
         if (entireHand) {
             out << *hand;
-        } else {
+        } else if (hand->size() > 0) {
             out << hand->top()->getName() << endl;
         }
     }
@@ -239,6 +239,7 @@ public:
 
             out << "): ";
 
+            in.ignore();
             in >> chainIndex;
             out << endl;
         }
