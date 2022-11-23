@@ -9,6 +9,7 @@
 #include "vector"
 #include "../CardFactory.h"
 #include "../Cards/Card.h"
+#include "../Exceptions/DeckEmptyException.h"
 
 using namespace std;
 
@@ -35,6 +36,11 @@ public:
     }
 
     Card* draw() {
+
+        if (empty()) {
+            throw DeckEmptyException();
+        }
+
         // Get the last card
         Card* card = back();
 

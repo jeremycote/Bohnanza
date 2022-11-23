@@ -1,6 +1,7 @@
 #include <iostream>
 #include <sstream>
 #include "Player.h"
+#include "Exceptions/DeckEmptyException.h"
 #include "Structures/Deck.h"
 #include "CardFactory.h"
 #include "Structures/Table.h"
@@ -102,23 +103,7 @@ int main() {
                     }
                 }
 
-                int chainIndex = 0;
-
-                while (chainIndex < 1 || chainIndex > players[i]->getMaxNumChains()) {
-                    cout << "Select chain onto which to play your next card (1, 2";
-                    if (players[i]->getMaxNumChains() == 3) {
-                        cout << ", 3";
-                    }
-
-                    cout << "): ";
-
-                    cin >> chainIndex;
-                    cout << endl;
-                }
-
-                // Decrement chain index to convert from human index to array index;
-                chainIndex--;
-
+                int chainIndex = players[i]->selectChain(cout, cin);
                 players[i]->playOnChain(chainIndex, players[i]->getHand().play());
             }
 
@@ -141,9 +126,14 @@ int main() {
             }
 
             // Draw three cards and place them in the trade area;
-            for (int idx = 0; idx < 3; idx++) {
-                *tradeArea += deck->draw();
+            try {
+                for (int idx = 0; idx < 3; idx++) {
+                    *tradeArea += deck->draw();
+                }
+            } catch (DeckEmptyException& e) {
+                cout << "Warning. Deck is empty. This is the last turn!" << endl;
             }
+
 
             // While top card of discard matches card in trade area
             while (tradeArea->legal(discard->top())) {
@@ -151,16 +141,43 @@ int main() {
                 *tradeArea += discard->pickUp();
             }
 
-            // for all cards in trade area
-            for (int idx = 0; idx < tradeArea->numCards(); idx++) {
-                // TODO: Get name of cards to trade
-                tradeArea->trade("name");
+            // Display trade area
+            cout << *table;
+
+            // Chain cards from the trade area
+            if (askYesNo("Would you like to pick up cards from the trade area?")) {
+
+                bool continueTrading = true;
+
+                while (continueTrading) {
+                    string cardNameToPickup;
+
+                    cout << "Enter card name to pickup (Enter 'STOP' to stop trading): ";
+                    cin >> cardNameToPickup;
+                    cout << endl;
+
+                    if (tradeArea->contains(cardNameToPickup)) {
+                        players[i]->playOnChain(players[i]->selectChain(cout,cin), tradeArea->trade(cardNameToPickup));
+
+                        // Display trade area
+                        cout << *table;
+                    } else if (cardNameToPickup == "STOP" || cardNameToPickup == "stop" || cardNameToPickup == "s" || cardNameToPickup == "S" || askYesNo("Trade area does not contain card, would you like to stop trading?")) {
+                        continueTrading = false;
+                    }
+                }
             }
 
             // Draw two cards and add them to the player's hand
-            for (int idx = 0; idx < 2; idx++) {
-                players[i]->getHand() += deck->draw();
+
+            try {
+                for (int idx = 0; idx < 2; idx++) {
+                    players[i]->getHand() += deck->draw();
+                }
+            } catch (DeckEmptyException& e) {
+                // Do nothing since cards are no longer used
             }
+
+
 
             if (askYesNo("Would you like to save and quit")) {
 
@@ -184,6 +201,23 @@ int main() {
                     cout << "Failed to save file." << endl;
                 }
             }
+        }
+    }
+
+    int winner = -1;
+
+    for (int i = 0; i < nPlayers; i++) {
+        if (table->win(players[i]->getName())) {
+            winner = i;
+        }
+    }
+
+    if (winner == -1) {
+        cout << "It's a tie! Both players have " << players[0]->getNumCoins() << " coins!" << endl;
+    } else {
+        cout << players[winner]->getName() << " wins!" << endl;
+        for (auto & player : players) {
+            cout << player->getName() << " has " << player->getNumCoins() << " coins.";
         }
     }
 

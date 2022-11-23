@@ -93,7 +93,7 @@ public:
      * @param playerName
      * @return
      */
-    bool win(string& playerName) {
+    bool win(const string& playerName) {
         if (deck.empty() && p1.getNumCoins() != p2.getNumCoins()) {
             return (p1.getNumCoins() > p2.getNumCoins() ? p1 : p2).getName() == playerName;
         }

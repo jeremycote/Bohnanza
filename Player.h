@@ -221,6 +221,31 @@ public:
         }
     }
 
+    /**
+     * Return a valid chain index chosen by player
+     * @param out
+     * @param in
+     * @return
+     */
+    int selectChain(ostream& out, istream& in) {
+
+        int chainIndex = 0;
+
+        while (chainIndex < 1 || chainIndex > getMaxNumChains()) {
+            out << "Select chain onto which to play your next card (1, 2";
+            if (getMaxNumChains() == 3) {
+                out << ", 3";
+            }
+
+            out << "): ";
+
+            in >> chainIndex;
+            out << endl;
+        }
+
+        return chainIndex - 1;
+    }
+
     friend ostream& operator<<(ostream& out, const Player& player);
 };
 

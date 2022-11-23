@@ -30,7 +30,7 @@ public:
         out << getName()[0];
     };
 
-    virtual CardType getType() const {
+    virtual CardType getType() const override {
         return BlackType;
     };
 };

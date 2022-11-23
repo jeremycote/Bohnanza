@@ -39,11 +39,37 @@ public:
     }
 
     bool legal(Card* card) {
-
+        return any_of(cards.begin(), cards.end(), [card](const auto& c){
+            return c->getType() == card->getType();
+        });
     }
 
-    Card* trade(string cardName) {
+    /**
+     * Returns true if trade area contains card with name
+     * @param cardName
+     * @return
+     */
+    bool contains(const string& cardName) {
+        // Iterate over cards, return true if any of them have the correct name
+        return any_of(cards.begin(), cards.end(), [cardName](const auto& card){
+            return card->getName() == cardName;
+        });
+    }
 
+    Card* trade(const string& cardName) {
+        auto cardIterator = cards.begin();
+        while (cardIterator != cards.end())
+        {
+            if ((*cardIterator)->getName() == cardName) {
+                Card* card = *cardIterator;
+                cards.erase(cardIterator);
+                return card;
+            }
+
+            cardIterator++;
+        }
+
+        throw out_of_range("Card not found");
     }
 
     int numCards() {

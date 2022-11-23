@@ -29,7 +29,7 @@ public:
     void print(ostream& out) const override {
         out << getName()[0];
     };
-    virtual CardType getType() const {
+    virtual CardType getType() const override {
         return StinkType;
     };
 };
