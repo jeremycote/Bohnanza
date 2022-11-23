@@ -75,47 +75,32 @@ int main() {
 
         // For each player
         for (int i = 0; i < nPlayers; i++) {
-
-            if (askYesNo("Would you like to save and quit")) {
-
-                cout << "Enter filename: ";
-                string filename;
-                cin >> filename;
-                cout << endl;
-
-                ofstream file(filename, ifstream::out);
-
-                if (file) {
-
-                    cout << "Saving to: " << filename << endl;
-
-                    table->saveTable(file);
-
-                    file.close();
-
-                    return 0;
-                } else {
-                    cout << "Failed to save file." << endl;
-                }
-            }
-
             // Display table
             cout << *table;
-            players[i]->printHand(cout, true);
 
             // Player draws top card from deck
-            players[i]->getHand() += deck->draw();
+            Card* card = deck->draw();
+            cout << players[i]->getName() << " drew a " << card->getName() << endl;
+            players[i]->getHand() += card;
+
+            // Display hand
+            players[i]->printHand(cout, true);
 
             // If trade area is not empty
             if (tradeArea->numCards() > 0) {
                 // TODO: Add beans to chains or discard them
             }
 
-            int play = 0;
-            while (play < 2) {
-                // Play top card from hand
+            for (int play = 0; play < 2; play++) {
                 cout << "Next card to play is: ";
                 players[i]->printHand(cout, false);
+
+                if (play == 1 && players[i]->getHand().size() > 0) {
+                    if (!askYesNo("Would you like to plant a second bean?")) {
+                        // If they choose no, break out of for loop
+                        break;
+                    }
+                }
 
                 int chainIndex = 0;
 
@@ -135,17 +120,13 @@ int main() {
                 chainIndex--;
 
                 players[i]->playOnChain(chainIndex, players[i]->getHand().play());
-
-                if (play == 0 && !askYesNo("Would you like to plant a second bean")){
-                    play++;
-                }
-                play++;
             }
 
             players[i]->printHand(cout, true);
 
-            if (askYesNo("Would you like to plant a second bean")) {
-
+            if (players[i]->getHand().size() == 0) {
+                cout << "Skipping discard phase because hand is empty." << endl;
+            } else if (askYesNo("Would you like to discard a card?")) {
                 int idx = -1;
                 while (idx < 0 || idx > players[i]->getHand().size()) {
                     cout << "Select card to discard (Enter '0' to cancel): ";
@@ -179,6 +160,29 @@ int main() {
             // Draw two cards and add them to the player's hand
             for (int idx = 0; idx < 2; idx++) {
                 players[i]->getHand() += deck->draw();
+            }
+
+            if (askYesNo("Would you like to save and quit")) {
+
+                cout << "Enter filename: ";
+                string filename;
+                cin >> filename;
+                cout << endl;
+
+                ofstream file(filename, ifstream::out);
+
+                if (file) {
+
+                    cout << "Saving to: " << filename << endl;
+
+                    table->saveTable(file);
+
+                    file.close();
+
+                    return 0;
+                } else {
+                    cout << "Failed to save file." << endl;
+                }
             }
         }
     }
