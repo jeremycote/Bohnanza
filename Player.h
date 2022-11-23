@@ -185,8 +185,8 @@ public:
      */
     void buyThirdChain() {
         if (maxNumChains == 2) {
-            if (coins >= 2) {
-                coins -= 2;
+            if (coins >= 3) {
+                coins -= 3;
                 maxNumChains = 3;
             } else {
                 // Not enough coins

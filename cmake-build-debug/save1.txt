@@ -3,7 +3,7 @@ Card:
 Stink: Stink Stink Stink
 Card:
 Hand: Stink Soy
-Jeremy 1 coins 2 chains
+Jeremy 3 coins 2 chains
 Blue: Blue Blue Blue
 Card:
 Card:

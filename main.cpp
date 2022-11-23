@@ -66,6 +66,11 @@ int main() {
             // Display table
             cout << *table;
 
+            if (players[i]->getMaxNumChains() == 2 && players[i]->getNumCoins() >= 3 && askYesNo("Would you like to purchase a third bean field?")) {
+                players[i]->buyThirdChain();
+                cout << *table;
+            }
+
             // Player draws top card from deck
             try {
                 Card* card = deck->draw();
