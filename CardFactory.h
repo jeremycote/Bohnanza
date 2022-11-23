@@ -5,8 +5,6 @@
 #ifndef BEANS_CARDFACTORY_H
 #define BEANS_CARDFACTORY_H
 
-#include "Constants.h"
-
 #include "Cards/Card.h"
 #include "Cards/Blue.h"
 #include "Cards/Chili.h"
@@ -16,7 +14,6 @@
 #include "Cards/Black.h"
 #include "Cards/Red.h"
 #include "Cards/Garden.h"
-#include "Structures/Deck.h"
 
 #include <random>
 
@@ -83,22 +80,32 @@ public:
     static CardFactory* getInstance() {
         return &instance;
     }
-    Deck getDeck() {
-        // Instantiate deck
+    Deck getDeck();
 
-        istringstream d(defaultCString);
-        Deck deck(d, this);
-
-        shuffle(cards, cards + nCards, default_random_engine(0));
-
+    /**
+     * Get an unallocated card
+     * @return
+     */
+    Card* getUnallocatedCard(string identifier) {
         for (int i = 0; i < nCards; i++) {
-            deck.push_back(cards[i]);
+
+            if (!cards[i]->getIsAllocated() && cards[i]->getName() == identifier) {
+                cards[i]->setIsAllocated(true);
+                return cards[i];
+            }
         }
 
-        return deck;
+        throw out_of_range("There are no unallocated cards with identifier " + identifier);
+    }
+
+    /**
+     * Reset allocation of all cards
+     */
+    void resetAllocation() {
+        for (int i = 0; i < nCards; i++) {
+            cards[i]->setIsAllocated(false);
+        }
     }
 };
-
-CardFactory CardFactory::instance = CardFactory();
 
 #endif //BEANS_CARDFACTORY_H

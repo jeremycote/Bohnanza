@@ -7,7 +7,6 @@
 
 using namespace std;
 
-char defaultCString[256] = "default";
 int startingHandSize = 5;
 
 #endif //BEANS_CONSTANTS_H

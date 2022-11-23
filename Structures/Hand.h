@@ -31,8 +31,11 @@ public:
      * @param in
      * @param factory
      */
-    Hand(istream& in, const CardFactory* factory) {
-
+    Hand(istream& in, CardFactory* factory) {
+        string word;
+        while (in >> word) {
+            cards.push_back(factory->getUnallocatedCard(word));
+        }
     }
 
     Hand& operator+=(Card* card) {
@@ -68,6 +71,10 @@ public:
         return *front;
     }
 
+    int size() {
+        return cards.size();
+    }
+
     friend ostream& operator<<(ostream& out, const Hand& hand);
 };
 
@@ -76,7 +83,7 @@ ostream& operator<<(ostream& out, const Hand& hand) {
     out << "Hand:";
 
     for(const auto& card: hand.cards) {
-        out << " " << *card;
+        out << " " << card->getName();
     }
 
     return out << endl;

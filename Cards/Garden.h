@@ -16,7 +16,7 @@ public:
             case 3:
                 return 3;
             default:
-                return 0;
+                return 100;
         }
     };
     string getName() const override {
@@ -24,6 +24,9 @@ public:
     };
     void print(ostream& out) const override {
         out << getName()[0];
+    };
+    virtual CardType getType() const {
+        return GardenType;
     };
 };
 

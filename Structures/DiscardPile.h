@@ -12,9 +12,7 @@
 
 using namespace std;
 
-class DiscardPile {
-private:
-    vector<Card *> cards;
+class DiscardPile : public vector<Card*> {
 public:
 
     /**
@@ -29,8 +27,11 @@ public:
      * @param in
      * @param factory
      */
-    DiscardPile(istream& in, const CardFactory* factory) {
-
+    DiscardPile(istream& in, CardFactory* factory) {
+        string word;
+        while (in >> word) {
+            push_back(factory->getUnallocatedCard(word));
+        }
     }
 
     /**
@@ -39,7 +40,7 @@ public:
      * @return
      */
     DiscardPile &operator+=(Card *card) {
-        cards.push_back(card);
+        push_back(card);
         return *this;
     }
 
@@ -49,10 +50,10 @@ public:
      */
     Card *pickUp() {
         // Get the last card
-        Card *card = cards.back();
+        Card *card = back();
 
         // Remove the last card from the deck
-        cards.pop_back();
+        pop_back();
 
         return card;
     }
@@ -62,15 +63,15 @@ public:
      * @return
      */
     Card *top() const {
-        return cards.back();
+        return back();
     }
 
     void print(ostream &out) const {
 
         out << "DiscardPile:";
 
-        for(const auto& card: cards) {
-            out << " " << card;
+        for(const auto& card: *this) {
+            out << " " << card->getName();
         }
 
         out << endl;
@@ -87,7 +88,7 @@ public:
 
 ostream& operator<<(ostream& out, const DiscardPile& pile) {
 
-    out << pile.top();
+    out << *pile.top();
 
     return out;
 }

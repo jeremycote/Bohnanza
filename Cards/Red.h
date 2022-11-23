@@ -20,7 +20,7 @@ public:
             case 4:
                 return 5;
             default:
-                return 0;
+                return 100;
         }
     };
     string getName() const override {
@@ -28,6 +28,9 @@ public:
     };
     void print(ostream& out) const override {
         out << getName()[0];
+    };
+    virtual CardType getType() const {
+        return RedType;
     };
 };
 

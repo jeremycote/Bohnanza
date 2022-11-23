@@ -20,17 +20,18 @@ public:
     /**
      * Constructor for creating a new deck
      */
-    Deck() {
-
-    }
+    Deck() = default;
 
     /**
      * Constructor for creating a deck from istream
      * @param in
      * @param factory
      */
-    Deck(istream& in, const CardFactory* factory) {
-
+    Deck(istream& in, CardFactory* factory) {
+        string word;
+        while (in >> word) {
+            push_back(factory->getUnallocatedCard(word));
+        }
     }
 
     Card* draw() {
@@ -43,18 +44,16 @@ public:
         return card;
     }
 
-    friend ostream& operator<< (ostream& out, const Deck& deck);
-};
+    friend ostream& operator<< (ostream& out, const Deck& deck) {
+        // for each card in deck
+        out << "Deck:";
 
-ostream& operator<<(ostream& out, const Deck& deck) {
-    // for each card in deck
-    cout << "Deck:";
+        for(const auto& card: deck) {
+            out << " " << card->getName();
+        }
 
-    for(const auto& card: deck) {
-        out << " " << *card;
+        return out << endl;
     }
-
-    return out << endl;
-}
+};
 
 #endif //BEANS_DECK_H

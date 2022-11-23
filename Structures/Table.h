@@ -17,24 +17,36 @@ using namespace std;
 
 class Table {
 private:
-    Player *p1;
-    Player *p2;
+    Player p1;
+    Player p2;
 
-    Deck *deck;
-    DiscardPile *discardPile;
-    TradeArea *tradeArea;
+    Deck deck;
+    DiscardPile discardPile;
+    TradeArea tradeArea;
 
 public:
 
     /**
      * Constructor for creating an empty table
      */
-    Table(Player *p1, Player *p2, Deck *deck, DiscardPile* discard, TradeArea *tradeArea) {
-        this->p1 = p1;
-        this->p2 = p2;
-        this->deck = deck;
-        this->discardPile = discard;
-        this->tradeArea = tradeArea;
+    Table() {
+
+        string p1Name;
+        string p2Name;
+
+        cout << "Enter P1 Name: ";
+        cin >> p1Name;
+        cout << endl << "Enter P2 Name: ";
+        cin >> p2Name;
+        cout << endl;
+
+        p1 = Player(p1Name);
+        p2 = Player(p2Name);
+
+        // Start a new game by using default constructors
+        deck = CardFactory::getInstance()->getDeck();
+        discardPile = DiscardPile();
+        tradeArea = TradeArea();
     }
 
     /**
@@ -43,26 +55,36 @@ public:
      */
     Table(istream& in, const CardFactory* factory) {
 
-    }
+        string word;
+        string line;
+        istringstream *ss;
 
-    Table(istream& in, const CardFactory* factory, Player *p1, Player *p2, Deck *deck, DiscardPile* discard, TradeArea *tradeArea) : Table(in, factory) {
-        this->p1 = p1;
-        this->p2 = p2;
-        this->deck = deck;
-        this->discardPile = discard;
-        this->tradeArea = tradeArea;
-    }
+        // Resume a game by using istream constructors
+        p1 = Player(in, CardFactory::getInstance());
+        p2 = Player(in, CardFactory::getInstance());
 
-    /**
-     * Copy constructor
-     * @param o
-     */
-    Table(Table& o) {
-        p1 = o.p1;
-        p2 = o.p2;
-        deck = o.deck;
-        discardPile = o.discardPile;
-        tradeArea = o.tradeArea;
+        getline(in, line);
+
+        ss = new istringstream(line);
+        *ss >> word;
+
+        deck = Deck(*ss, CardFactory::getInstance());
+
+        delete ss;
+
+        getline(in, line);
+        ss = new istringstream(line);
+        *ss >> word;
+
+        discardPile = DiscardPile(*ss, CardFactory::getInstance());
+
+        delete ss;
+
+        getline(in, line);
+        ss = new istringstream(line);
+        *ss >> word;
+
+        tradeArea = TradeArea(*ss, CardFactory::getInstance());
     }
 
     /**
@@ -72,11 +94,8 @@ public:
      * @return
      */
     bool win(string& playerName) {
-        if (deck->empty() && p1->getNumCoins() != p2->getNumCoins()) {
-
-            Player *winner = p1->getNumCoins() > p2->getNumCoins() ? p1 : p2;
-
-            return winner->getName() == playerName;
+        if (deck.empty() && p1.getNumCoins() != p2.getNumCoins()) {
+            return (p1.getNumCoins() > p2.getNumCoins() ? p1 : p2).getName() == playerName;
         }
 
         return false;
@@ -87,22 +106,41 @@ public:
     }
 
     void saveTable(ostream& out) {
-        out << *p1;
-        p1->printHand(out, true);
-        out << *p2;
-        p2->printHand(out, true);
-        discardPile->print(out);
-        out << *tradeArea;
-        out << *deck;
+        p1.print(out, true);
+        p1.printHand(out, true);
+        p2.print(out, true);
+        p2.printHand(out, true);
+        out << deck;
+        discardPile.print(out);
+        out << tradeArea;
     }
 
     friend ostream& operator<< (ostream& out, const Table& table){
-
+        table.p1.print(out);
+        table.p2.print(out);
+        table.discardPile.print(out);
+        out << endl << table.tradeArea << endl;
         return out;
     }
 
-    Table() {
+    Deck* getDeck() {
+        return &deck;
+    }
 
+    DiscardPile* getDiscardPile() {
+        return &discardPile;
+    }
+
+    TradeArea* getTradeArea() {
+        return &tradeArea;
+    }
+
+    Player* getPlayer(int idx) {
+        if (idx < 0 || idx > 2) {
+            throw out_of_range("Player index is out of range");
+        }
+
+        return idx == 0 ? &p1 : &p2;
     }
 };
 

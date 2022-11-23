@@ -26,12 +26,16 @@ public:
     /**
      * Constructor for creating a trade area from istream
      */
-    TradeArea(istream&, const CardFactory*) {
-
+    TradeArea(istream& in, CardFactory* factory) {
+        string word;
+        while (in >> word) {
+            cards.push_back(factory->getUnallocatedCard(word));
+        }
     }
 
     TradeArea& operator+=(Card* card) {
-
+        cards.push_back(card);
+        return *this;
     }
 
     bool legal(Card* card) {
@@ -51,7 +55,7 @@ public:
 
         if (!tradeArea.cards.empty()) {
             for(const auto& card: tradeArea.cards) {
-                out << " " << *card;
+                out << " " << card->getName();
             }
         }
 

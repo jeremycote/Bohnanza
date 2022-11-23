@@ -7,7 +7,6 @@
 
 #include <iostream>
 #include <vector>
-#include <typeinfo>
 #include "../Cards/Card.h"
 #include "../CardFactory.h"
 
@@ -17,58 +16,68 @@ template <class T>
 class Chain {
 private:
     vector<T*> cards;
-    static const type_info& cardType;
 
 public:
 
-    Chain<T>() {
-    }
+    Chain<T>() = default;
 
-    Chain<T>(istream&, const CardFactory*) {
+    Chain<T>(istream& in, const CardFactory* factory) {
+        string w;
+        string line;
 
-    }
+        getline(in, line);
 
-    Chain<T>& operator+=(Card* card) {
+        istringstream ss(line);
 
-        T* c = dynamic_cast<T*>(card);
-
-        if (c == nullptr) {
-            throw bad_cast();
+        while (ss >> w) {
+            cards.push_back(factory->getInstance()->getUnallocatedCard(w));
         }
+    }
 
-        cards.push_back(c);
+    Chain<T>& operator+=(T* card) {
+        cards.push_back(card);
         return *this;
     }
 
-    int sell() {
-        if (cards.size() <= 0) {
-            return 0;
-        }
+    bool chainMatchesType(T* card);
 
-        Card* c = ((Card*)cards[0]);
-        //TODO: Fix this
+    int sell() {
+
+        int s = cards.size();
+
+        Card* c = dynamic_cast<Card*>(cards[0]);
+
+        int i = 4;
+        while (i > 0) {
+
+            if (c->getCardsPerCoin(i) <= s) {
+                return c->getCardsPerCoin(i);
+            }
+
+            i--;
+        }
 
         return 0;
     }
-    friend ostream& operator<< (ostream& out, const Chain<T>& chain)  {
 
-        const type_info& i = typeid(T);
-        const char* name = i.name();
-
-        if (i == cardType) {
+    void save(ostream& out) {
+        if (cards.empty()) {
             out << "Card:";
         } else {
-
-            int c = 0;
-            while (name[c] != '\0') {
-                if (c > 1) {
-                    out << name[c];
-                }
-
-                c++;
+            out << cards[0]->getName() << ":";
+            for(const auto& card: cards) {
+                out << " " << card->getName();
             }
-            out << ": ";
+        }
+        out << endl;
+    }
 
+    friend ostream& operator<< (ostream& out, const Chain<Card>& chain)  {
+
+        if (chain.cards.empty()) {
+            out << "Card:";
+        } else {
+            out << chain.cards[0]->getName() << ":";
             for(const auto& card: chain.cards) {
                 out << " " << *card;
             }
@@ -82,7 +91,18 @@ public:
 };
 
 template <class T>
-const type_info& Chain<T>::cardType = typeid(Card);
+bool Chain<T>::chainMatchesType(T *card) {
+    return 0;
+}
+
+template<>
+bool Chain<Card>::chainMatchesType(Card *card) {
+    if (cards.size() == 0) {
+        return false;
+    }
+
+    return cards[0]->getType() == card->getType();
+}
 
 
 #endif //BEANS_CHAIN_H
