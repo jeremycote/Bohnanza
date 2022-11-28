@@ -86,7 +86,7 @@ public:
 
 ostream& operator<<(ostream& out, const DiscardPile& pile) {
 
-    out << *pile.top();
+    out << pile.top()->getName();
 
     return out;
 }

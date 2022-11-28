@@ -130,7 +130,7 @@ public:
     friend ostream& operator<< (ostream& out, const Table& table){
         table.p1.print(out);
         table.p2.print(out);
-        table.discardPile.print(out);
+        out << "Discard Pile: " << table.discardPile;
         out << endl << table.tradeArea << endl;
         return out;
     }
