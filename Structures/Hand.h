@@ -80,8 +80,9 @@ ostream& operator<<(ostream& out, const Hand& hand) {
 
     out << "Hand:";
 
-    for(const auto& card: hand.cards) {
-        out << " " << card->getName();
+    auto it = hand.cards.begin();
+    for (it; it != hand.cards.end(); ++it) {
+        out << " " << (*it)->getName();
     }
 
     return out << endl;

@@ -86,6 +86,10 @@ public:
 
 ostream& operator<<(ostream& out, const DiscardPile& pile) {
 
+    if (pile.empty()) {
+        return out;
+    }
+
     out << pile.top()->getName();
 
     return out;

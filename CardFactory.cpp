@@ -5,18 +5,16 @@
 #include "CardFactory.h"
 #include "Structures/Deck.h"
 
-Deck CardFactory::getDeck() {
-
-
-
+Deck CardFactory::getDeck() const {
     // Instantiate deck
     Deck deck;
 
-    shuffle(cards, cards + nCards, default_random_engine(0));
+    std::random_device dev;
+    shuffle(cards, cards + nCards, default_random_engine(dev.entropy()));
 
     for (int i = 0; i < nCards; i++) {
         deck.push_back(cards[i]);
-        cards[i]->setIsAllocated(true);
+        cards[i]->setIsAllocated(false);
     }
 
     return deck;

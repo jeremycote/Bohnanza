@@ -5,6 +5,8 @@
 #ifndef BEANS_CARDFACTORY_H
 #define BEANS_CARDFACTORY_H
 
+#include <random>
+
 #include "Cards/Card.h"
 #include "Cards/Blue.h"
 #include "Cards/Chili.h"
@@ -15,21 +17,9 @@
 #include "Cards/Red.h"
 #include "Cards/Garden.h"
 
-#include <random>
-
 class Deck;
 
 using namespace std;
-
-#define N_CARDS 104
-#define N_BLUE 20
-#define N_CHILI 18
-#define N_STINK 16
-#define N_GREEN 14
-#define N_SOY 12
-#define N_BLACK 10
-#define N_RED 8
-#define N_GARDEN 6
 
 class CardFactory {
 private:
@@ -39,48 +29,59 @@ private:
     Card** cards;
     int nCards = 0;
 
+    /**
+     * Create all cards for the system.
+     */
     CardFactory() {
+        cards = new Card*[nCards];
 
-        cards = new Card*[N_CARDS];
-
-        for (int i = 0; i < N_BLUE; i++) {
+        for (int i = 0; i < Blue::getTotalNumber(); i++) {
             cards[nCards] = new Blue;
             nCards++;
         }
-        for (int i = 0; i < N_CHILI; i++) {
+        for (int i = 0; i < Chili::getTotalNumber(); i++) {
             cards[nCards] = new Chili;
             nCards++;
         }
-        for (int i = 0; i < N_STINK; i++) {
+        for (int i = 0; i < Stink::getTotalNumber(); i++) {
             cards[nCards] = new Stink;
             nCards++;
         }
-        for (int i = 0; i < N_GREEN; i++) {
+        for (int i = 0; i < Green::getTotalNumber(); i++) {
             cards[nCards] = new Green;
             nCards++;
         }
-        for (int i = 0; i < N_SOY; i++) {
+        for (int i = 0; i < Soy::getTotalNumber(); i++) {
             cards[nCards] = new Soy;
             nCards++;
         }
-        for (int i = 0; i < N_BLACK; i++) {
+        for (int i = 0; i < Black::getTotalNumber(); i++) {
             cards[nCards] = new Black;
             nCards++;
         }
-        for (int i = 0; i < N_RED; i++) {
+        for (int i = 0; i < Red::getTotalNumber(); i++) {
             cards[nCards] = new Red;
             nCards++;
         }
-        for (int i = 0; i < N_GARDEN; i++) {
+        for (int i = 0; i < Garden::getTotalNumber(); i++) {
             cards[nCards] = new Garden;
             nCards++;
         }
     }
 public:
+    /**
+     * Return reference to CardFactory instance
+     * @return
+     */
     static CardFactory* getInstance() {
         return &instance;
     }
-    Deck getDeck();
+
+    /**
+     * Return a shuffled deck
+     * @return
+     */
+    Deck getDeck() const;
 
     /**
      * Get an unallocated card

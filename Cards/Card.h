@@ -27,12 +27,16 @@ public:
         return out;
     }
 
-    bool getIsAllocated() {
+    bool getIsAllocated() const {
         return isAllocated;
     }
 
-    void setIsAllocated(bool isAllocated) {
-        this->isAllocated = isAllocated;
+    void setIsAllocated(const bool& allocate) {
+        this->isAllocated = allocate;
+    }
+
+    static int getTotalNumber() {
+        return 104;
     }
 };
 

@@ -11,7 +11,6 @@
 #include "../Player.h"
 #include "../Structures/DiscardPile.h"
 #include "../Structures/TradeArea.h"
-#include "../Constants.h"
 
 using namespace std;
 
@@ -31,7 +30,7 @@ public:
     /**
      * Constructor for creating an empty table
      */
-    Table() {
+    Table(const CardFactory* factory) {
 
         string p1Name;
         string p2Name;
@@ -42,7 +41,6 @@ public:
         getline(cin, p1Name);
         cout << endl;
 
-
         cout << endl << "Enter P2 Name: ";
         getline(cin, p2Name);
         cout << endl;
@@ -51,7 +49,7 @@ public:
         p2 = Player(p2Name);
 
         // Start a new game by using default constructors
-        deck = CardFactory::getInstance()->getDeck();
+        deck = factory->getDeck();
         discardPile = DiscardPile();
         tradeArea = TradeArea();
 

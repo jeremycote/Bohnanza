@@ -7,7 +7,6 @@
 #include "Structures/Table.h"
 #include <string>
 #include <fstream>
-#include "Constants.h"
 
 using namespace std;
 
@@ -64,7 +63,7 @@ int main() {
 
         file.close();
     } else {
-        table = new Table();
+        table = new Table(CardFactory::getInstance());
     }
 
     Deck* deck = table->getDeck();

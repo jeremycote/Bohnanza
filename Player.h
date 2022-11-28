@@ -9,8 +9,6 @@
 #include <iostream>
 #include <typeinfo>
 
-#include "Constants.h"
-
 #include "Structures/Chain.h"
 #include "Structures/Hand.h"
 
@@ -18,6 +16,9 @@
 
 using namespace std;
 
+/**
+ * Represents a player, with name, coins, hand and chains
+ */
 class Player {
 private:
     string name;
@@ -27,14 +28,22 @@ private:
     ChainBase* chains[3]{};
     Hand* hand;
 
+    /**
+     * Private half of the playOnChain method.
+     * @tparam T
+     * @param idx
+     * @param card
+     */
     template<class T>
     void _playOnChain(int idx, Card* card) {
         // Create chain if null
         if (chains[idx] == nullptr) {
             chains[idx] = new Chain<T>();
         } else {
+            // Cast existing chain to child type
             auto* pChain = dynamic_cast<Chain<T>*>(chains[idx]);
 
+            // If cast failed, the chain contains cards of a different type. Sell it and make a new one.
             if (pChain == nullptr) {
                 *this += chains[idx]->sell();
                 delete chains[idx];
@@ -42,6 +51,7 @@ private:
             }
         }
 
+        // Play card onto chain.
         auto* chain = dynamic_cast<Chain<T>*>(chains[idx]);
         *chain += card;
     }
@@ -89,6 +99,7 @@ public:
             *ss >> word;
             word.pop_back();
 
+            // Parse first word of line as Chain type
             if (word != "Card") {
                 if (word == Black::name) {
                     chains[i] = new Chain<Black>(*ss, factory);
@@ -129,6 +140,10 @@ public:
         hand = new Hand();
     }
 
+    /*
+     *  Copy Constructor for player.
+     *  Delete old chains and copy pointers pointing to new chains
+     */
     Player(Player& o) {
         if (this != &o) {
             // Delete old pointers
@@ -163,6 +178,10 @@ public:
         return coins;
     }
 
+    /**
+     * Get number of chains that aren't empty.
+     * @return
+     */
     int getNumChains() const {
         int c = 0;
         for (int i = 0; i < maxNumChains; i++) {
@@ -175,7 +194,7 @@ public:
     }
 
     /**
-     * Add n coins to player's total
+     * Add coins to player's total
      * @param nCoins
      * @return
      */
@@ -188,7 +207,7 @@ public:
      * Return max number of chains. (Either 2 or 3)
      * @return
      */
-    int getMaxNumChains() {
+    int getMaxNumChains() const {
         return maxNumChains;
     }
 
@@ -205,11 +224,18 @@ public:
         return *chains[i];
     }
 
+    /**
+     * Add a card onto a chain with idx.
+     * @param idx
+     * @param card
+     */
     void playOnChain(int idx, Card* card) {
 
         if (idx < 0 || idx > maxNumChains) {
             throw out_of_range("Idx out of maxNumChains range");
         }
+
+        // Find type of card and call appropriate private playOnChain function.
 
         auto* black = dynamic_cast<Black*>(card);
         if (black != nullptr) {
@@ -277,6 +303,11 @@ public:
         }
     }
 
+    /**
+     * Print hand into ostream.
+     * @param out
+     * @param entireHand should print the entire hand or just the next card to be played.
+     */
     void printHand(ostream& out, bool entireHand) {
         if (entireHand) {
             out << *hand;
@@ -285,10 +316,20 @@ public:
         }
     }
 
+    /**
+     * Return reference to player's hand.
+     * @return
+     */
     Hand& getHand() {
         return *hand;
     }
 
+    /**
+     * Write player into ostream.
+     * Stub chains will create empty rows for empty chains.
+     * @param out
+     * @param stubChains
+     */
     void print(ostream& out, bool stubChains = false) const {
         out << name << " " << coins << " coins " << maxNumChains << " chains" << endl;
         for (int i = 0; i < (stubChains ? 3 : maxNumChains); i++) {
@@ -329,6 +370,12 @@ public:
         return chainIndex - 1;
     }
 
+    /**
+     * Write player into ostream without stubbing.
+     * @param out
+     * @param player
+     * @return
+     */
     friend ostream& operator<<(ostream& out, const Player& player);
 };
 

@@ -31,6 +31,10 @@ public:
     };
     void print(ostream& out) const override {
         out << getName()[0];
-    };
+    }
+
+    static int getTotalNumber() {
+        return 10;
+    }
 };
 #endif //BEANS_BLACK_H

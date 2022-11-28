@@ -26,7 +26,11 @@ public:
     };
     void print(ostream& out) const override {
         out << getName()[0];
-    };
+    }
+
+    static int getTotalNumber() {
+        return 6;
+    }
 };
 
 #endif //BEANS_GARDEN_H
