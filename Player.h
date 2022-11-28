@@ -24,8 +24,27 @@ private:
     int coins;
     int maxNumChains;
 
-    Chain<Card>* chains[3]{};
+    ChainBase* chains[3]{};
     Hand* hand;
+
+    template<class T>
+    void _playOnChain(int idx, Card* card) {
+        // Create chain if null
+        if (chains[idx] == nullptr) {
+            chains[idx] = new Chain<T>();
+        } else {
+            auto* pChain = dynamic_cast<Chain<T>*>(chains[idx]);
+
+            if (pChain == nullptr) {
+                *this += chains[idx]->sell();
+                delete chains[idx];
+                chains[idx] = new Chain<T>();
+            }
+        }
+
+        auto* chain = dynamic_cast<Chain<T>*>(chains[idx]);
+        *chain += card;
+    }
 public:
 
     Player() = default;
@@ -68,10 +87,24 @@ public:
             ss = new istringstream(line);
 
             *ss >> word;
+            word.pop_back();
 
-            if (word != "Card:") {
-                // TODO: Parse word into card class
-                chains[i] = new Chain<Card>(*ss, factory);
+            if (word != "Card") {
+                if (word == Black::name) {
+                    chains[i] = new Chain<Black>(*ss, factory);
+                } else if (word == Blue::name) {
+                    chains[i] = new Chain<Blue>(*ss, factory);
+                } else if (word == Chili::name) {
+                    chains[i] = new Chain<Chili>(*ss, factory);
+                } else if (word == Garden::name) {
+                    chains[i] = new Chain<Garden>(*ss, factory);
+                } else if (word == Red::name) {
+                    chains[i] = new Chain<Red>(*ss, factory);
+                } else if (word == Soy::name) {
+                    chains[i] = new Chain<Soy>(*ss, factory);
+                } else if (word == Stink::name) {
+                    chains[i] = new Chain<Stink>(*ss, factory);
+                }
             }
         }
 
@@ -153,7 +186,7 @@ public:
      * @param i
      * @return
      */
-    Chain<Card>& operator[](int i) {
+    ChainBase& operator[](int i) {
         if (i < 0 || i >= maxNumChains) {
             throw out_of_range("Index is out of range!");
         }
@@ -161,23 +194,61 @@ public:
         return *chains[i];
     }
 
-    template <class T>
-    void playOnChain(int idx, T* card) {
+    void playOnChain(int idx, Card* card) {
 
         if (idx < 0 || idx > maxNumChains) {
             throw out_of_range("Idx out of maxNumChains range");
         }
 
-        // Create chain if null
-        if (chains[idx] == nullptr) {
-            chains[idx] = new Chain<T>();
-        } else if (!chains[idx]->chainMatchesType(card)) {
-            *this += chains[idx]->sell();
-            delete chains[idx];
-            chains[idx] = new Chain<T>();
+        auto* black = dynamic_cast<Black*>(card);
+        if (black != nullptr) {
+            _playOnChain<Black>(idx, card);
+            return;
         }
 
-        *chains[idx] += card;
+        auto* blue = dynamic_cast<Blue*>(card);
+        if (blue != nullptr) {
+            _playOnChain<Blue>(idx, card);
+            return;
+        }
+
+        auto* chili = dynamic_cast<Chili*>(card);
+        if (chili != nullptr) {
+            _playOnChain<Chili>(idx, card);
+            return;
+        }
+
+        auto* garden = dynamic_cast<Garden*>(card);
+        if (garden != nullptr) {
+            _playOnChain<Garden>(idx, card);
+            return;
+        }
+
+        auto* green = dynamic_cast<Green*>(card);
+        if (green != nullptr) {
+            _playOnChain<Green>(idx, card);
+            return;
+        }
+
+        auto* red = dynamic_cast<Red*>(card);
+        if (red != nullptr) {
+            _playOnChain<Red>(idx, card);
+            return;
+        }
+
+        auto* soy = dynamic_cast<Soy*>(card);
+        if (soy != nullptr) {
+            _playOnChain<Soy>(idx, card);
+            return;
+        }
+
+        auto* stink = dynamic_cast<Stink*>(card);
+        if (stink != nullptr) {
+            _playOnChain<Stink>(idx, card);
+            return;
+        }
+
+        throw IllegalTypeException();
     }
 
     /**

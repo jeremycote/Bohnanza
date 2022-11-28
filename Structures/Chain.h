@@ -9,16 +9,17 @@
 #include <vector>
 #include "../Cards/Card.h"
 #include "../CardFactory.h"
+#include "ChainBase.h"
+#include "../Exceptions/IllegalTypeException.h"
 
 using namespace std;
 
 template <class T>
-class Chain {
+class Chain : public ChainBase {
 private:
     vector<T*> cards;
 
 public:
-
     Chain<T>() = default;
 
     Chain<T>(istream& in, const CardFactory* factory) {
@@ -30,18 +31,23 @@ public:
         istringstream ss(line);
 
         while (ss >> w) {
-            cards.push_back(factory->getInstance()->getUnallocatedCard(w));
+            cards.push_back(dynamic_cast<T*>(factory->getUnallocatedCard(w)));
         }
     }
 
-    Chain<T>& operator+=(T* card) {
-        cards.push_back(card);
+    Chain<T>& operator+=(Card* card) {
+
+        T* c = dynamic_cast<T*>(card);
+
+        if (c == nullptr) {
+            throw IllegalTypeException();
+        }
+
+        cards.push_back(c);
         return *this;
     }
 
-    bool chainMatchesType(T* card);
-
-    int sell() {
+    int sell() override {
 
         int s = cards.size();
 
@@ -60,7 +66,7 @@ public:
         return 0;
     }
 
-    void save(ostream& out) {
+    void save(ostream& out) override {
         if (cards.empty()) {
             out << "Card:";
         } else {
@@ -72,37 +78,19 @@ public:
         out << endl;
     }
 
-    friend ostream& operator<< (ostream& out, const Chain<Card>& chain)  {
+    void print(ostream& out) const override {
 
-        if (chain.cards.empty()) {
+        if (cards.empty()) {
             out << "Card:";
         } else {
-            out << chain.cards[0]->getName() << ":";
-            for(const auto& card: chain.cards) {
+            out << cards[0]->getName() << ":";
+            for(const auto& card: cards) {
                 out << " " << *card;
             }
         }
 
         out << endl;
-
-        return out;
     }
-
 };
-
-template <class T>
-bool Chain<T>::chainMatchesType(T *card) {
-    return 0;
-}
-
-template<>
-bool Chain<Card>::chainMatchesType(Card *card) {
-    if (cards.size() == 0) {
-        return false;
-    }
-
-    return cards[0]->getType() == card->getType();
-}
-
 
 #endif //BEANS_CHAIN_H

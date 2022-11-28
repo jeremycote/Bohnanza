@@ -40,7 +40,7 @@ public:
 
     bool legal(Card* card) {
         return any_of(cards.begin(), cards.end(), [card](const auto& c){
-            return c->getType() == card->getType();
+            return c->getName() == card->getName();
         });
     }
 

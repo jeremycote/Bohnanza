@@ -11,6 +11,15 @@
 
 using namespace std;
 
+const string Black::name = "Black";
+const string Blue::name = "Blue";
+const string Chili::name = "Chili";
+const string Garden::name = "Garden";
+const string Green::name = "Green";
+const string Red::name = "Red";
+const string Soy::name = "Soy";
+const string Stink::name = "Stink";
+
 CardFactory CardFactory::instance = CardFactory();
 
 bool askYesNo(string question) {

@@ -10,17 +10,6 @@
 
 using namespace std;
 
-enum CardType {
-    BlackType,
-    BlueType,
-    ChiliType,
-    GardenType,
-    GreenType,
-    RedType,
-    SoyType,
-    StinkType
-};
-
 class Card {
 private:
     Card(Card& o) = default;
@@ -45,8 +34,6 @@ public:
     void setIsAllocated(bool isAllocated) {
         this->isAllocated = isAllocated;
     }
-
-    virtual CardType getType() const = 0;
 };
 
 #endif //BEANS_CARD_H

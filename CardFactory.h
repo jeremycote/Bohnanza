@@ -86,7 +86,7 @@ public:
      * Get an unallocated card
      * @return
      */
-    Card* getUnallocatedCard(string identifier) {
+    Card* getUnallocatedCard(string& identifier) const {
         for (int i = 0; i < nCards; i++) {
 
             if (!cards[i]->getIsAllocated() && cards[i]->getName() == identifier) {

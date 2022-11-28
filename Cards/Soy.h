@@ -9,6 +9,8 @@
 
 class Soy : public Card {
 public:
+    const static string name;
+
     int getCardsPerCoin(int coins) const override {
         switch (coins) {
             case 1:
@@ -24,13 +26,10 @@ public:
         }
     };
     string getName() const override {
-        return "Soy";
+        return name;
     };
     void print(ostream& out) const override {
         out << getName()[0];
-    };
-    virtual CardType getType() const override {
-        return SoyType;
     };
 };
 
