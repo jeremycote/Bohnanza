@@ -43,7 +43,6 @@ public:
 
         // Get the last card
         Card* card = back();
-        card->setIsAllocated(true);
 
         // Remove the last card from the deck
         pop_back();

@@ -33,7 +33,7 @@ private:
      * Create all cards for the system.
      */
     CardFactory() {
-        cards = new Card*[nCards];
+        cards = new Card*[Card::getTotalNumber()];
 
         for (int i = 0; i < Blue::getTotalNumber(); i++) {
             cards[nCards] = new Blue;
@@ -67,6 +67,7 @@ private:
             cards[nCards] = new Garden;
             nCards++;
         }
+
     }
 public:
     /**
