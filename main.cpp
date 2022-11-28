@@ -20,14 +20,21 @@ const string Red::name = "Red";
 const string Soy::name = "Soy";
 const string Stink::name = "Stink";
 
+int ChainBase::longestLabel = 6;
+int ChainBase::spacer = 3;
+
 CardFactory CardFactory::instance = CardFactory();
 
 bool askYesNo(string question) {
-    char playChar;
-    cout << question << " (yes/no): ";
-    cin >> playChar;
-    cout << endl;
+    char playChar = ' ';
 
+    while (playChar != 'y' && playChar != 'n') {
+        cout << question << " (yes/no): ";
+
+        cin.clear();
+        cin >> playChar;
+        cout << endl;
+    }
     return playChar == 'y';
 }
 
@@ -70,11 +77,35 @@ int main() {
     // Game loop. Game ends when the deck is empty.
     while (!deck->empty()) {
 
+        if (askYesNo("Would you like to save and quit")) {
+
+            cout << "Enter filename: ";
+            string filename;
+            cin >> filename;
+            cout << endl;
+
+            ofstream file(filename, ifstream::out);
+
+            if (file) {
+
+                cout << "Saving to: " << filename << endl;
+
+                table->saveTable(file);
+
+                file.close();
+
+                return 0;
+            } else {
+                cout << "Failed to save file." << endl;
+            }
+        }
+
         // For each player
         for (int i = 0; i < nPlayers; i++) {
             // Display table
             cout << *table;
 
+            // Ask player to buy a 3rd bean field if they can afford it and don't have one.
             if (players[i]->getMaxNumChains() == 2 && players[i]->getNumCoins() >= 3 && askYesNo("Would you like to purchase a third bean field?")) {
                 players[i]->buyThirdChain();
                 cout << *table;
@@ -95,7 +126,33 @@ int main() {
 
             // If trade area is not empty
             if (tradeArea->numCards() > 0) {
-                // TODO: Add beans to chains or discard them
+                // Chain cards from the trade area
+                if (askYesNo("Would you like to pick up cards from the trade area?")) {
+
+                    bool continueTrading = true;
+
+                    while (continueTrading) {
+                        string cardNameToPickup;
+
+                        cout << "Enter card name to pickup (Enter 'STOP' to stop trading): ";
+                        cin >> cardNameToPickup;
+                        cout << endl;
+
+                        if (tradeArea->contains(cardNameToPickup)) {
+                            players[i]->playOnChain(players[i]->selectChain(cout,cin), tradeArea->trade(cardNameToPickup));
+
+                            // Display trade area
+                            cout << *table;
+                        } else if (cardNameToPickup == "STOP" || cardNameToPickup == "stop" || cardNameToPickup == "s" || cardNameToPickup == "S" || askYesNo("Trade area does not contain card, would you like to stop trading?")) {
+
+                            while (tradeArea->numCards() > 0) {
+                                *discard += tradeArea->getCard();
+                            }
+
+                            continueTrading = false;
+                        }
+                    }
+                }
             }
 
             for (int play = 0; play < 2; play++) {
@@ -187,31 +244,6 @@ int main() {
                 }
             } catch (DeckEmptyException& e) {
                 // Do nothing since cards are no longer used
-            }
-
-
-
-            if (askYesNo("Would you like to save and quit")) {
-
-                cout << "Enter filename: ";
-                string filename;
-                cin >> filename;
-                cout << endl;
-
-                ofstream file(filename, ifstream::out);
-
-                if (file) {
-
-                    cout << "Saving to: " << filename << endl;
-
-                    table->saveTable(file);
-
-                    file.close();
-
-                    return 0;
-                } else {
-                    cout << "Failed to save file." << endl;
-                }
             }
         }
     }

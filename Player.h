@@ -163,6 +163,17 @@ public:
         return coins;
     }
 
+    int getNumChains() const {
+        int c = 0;
+        for (int i = 0; i < maxNumChains; i++) {
+            if (chains[i] != nullptr) {
+                c++;
+            }
+        }
+
+        return c;
+    }
+
     /**
      * Add n coins to player's total
      * @param nCoins
@@ -256,8 +267,8 @@ public:
      */
     void buyThirdChain() {
         if (maxNumChains == 2) {
-            if (coins >= 3) {
-                coins -= 3;
+            if (coins >= 2) {
+                coins -= 2;
                 maxNumChains = 3;
             } else {
                 // Not enough coins
@@ -310,7 +321,7 @@ public:
 
             out << "): ";
 
-            in.ignore();
+            in.clear();
             in >> chainIndex;
             out << endl;
         }

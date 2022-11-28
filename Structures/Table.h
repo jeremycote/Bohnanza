@@ -24,6 +24,8 @@ private:
     DiscardPile discardPile;
     TradeArea tradeArea;
 
+    Player* currentPlayer;
+
 public:
 
     /**
@@ -112,7 +114,7 @@ public:
     }
 
     void printHand(bool entireHand) {
-//        currentPlayer->printHand(cout, entireHand);
+        currentPlayer->printHand(cout, entireHand);
     }
 
     void saveTable(ostream& out) {
@@ -151,6 +153,10 @@ public:
         }
 
         return idx == 0 ? &p1 : &p2;
+    }
+
+    void setCurrentPlayer(Player* p) {
+        this->currentPlayer = p;
     }
 };
 

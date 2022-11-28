@@ -16,6 +16,9 @@ using namespace std;
 
 class ChainBase {
 public:
+    static int longestLabel;
+    static int spacer;
+
     virtual int sell() = 0;
 
     virtual void save(ostream& out) = 0;

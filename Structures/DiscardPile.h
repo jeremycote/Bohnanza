@@ -18,9 +18,7 @@ public:
     /**
      * Constructor for creating an empty discard pile
      */
-    DiscardPile() {
-
-    }
+    DiscardPile() = default;
 
     /**
      * Constructor for creating a discard pile from istream

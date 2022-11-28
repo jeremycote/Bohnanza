@@ -19,9 +19,7 @@ public:
     /**
      * Constructor for creating an empty trade area
      */
-    TradeArea() {
-
-    }
+    TradeArea() = default;
 
     /**
      * Constructor for creating a trade area from istream
@@ -67,6 +65,22 @@ public:
             }
 
             cardIterator++;
+        }
+
+        throw out_of_range("Card not found");
+    }
+
+    /**
+     * Get first card. Used for discarding.
+     * @return
+     */
+    Card* getCard() {
+        auto cardIterator = cards.begin();
+        while (cardIterator != cards.end())
+        {
+            Card* card = *cardIterator;
+            cards.erase(cardIterator);
+            return card;
         }
 
         throw out_of_range("Card not found");

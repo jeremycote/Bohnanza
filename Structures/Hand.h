@@ -22,9 +22,7 @@ public:
     /**
      * Constructor for creating an empty hand
      */
-    Hand() {
-
-    }
+    Hand() = default;
 
     /**
      * Constructor for creating a hand from an istream
