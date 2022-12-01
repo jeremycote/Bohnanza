@@ -100,7 +100,10 @@ int main() {
         // For each player
         for (int i = 0; i < nPlayers; i++) {
 
+            cout << "=============" << endl;
             cout << "It's " << table->getPlayer(i)->getName() << " turn!" << endl;
+            cout << "=============" << endl;
+            cout << endl;
 
             // Display table
             cout << *table;
@@ -127,6 +130,12 @@ int main() {
 
             // If trade area is not empty
             if (tradeArea->numCards() > 0) {
+
+                cout << "=============" << endl;
+                cout << "Trade phase!" << endl;
+                cout << "=============" << endl;
+                cout << endl;
+
                 // Chain cards from the trade area
                 if (askYesNo("Would you like to pick up cards from the trade area?")) {
 
@@ -155,6 +164,11 @@ int main() {
                 }
             }
 
+            cout << "=============" << endl;
+            cout << "Planting phase!" << endl;
+            cout << "=============" << endl;
+            cout << endl;
+
             // Play up to 2 bean cards
             for (int play = 0; play < 2; play++) {
 
@@ -178,6 +192,11 @@ int main() {
             }
 
             table->getPlayer(i)->printHand(cout, true);
+
+            cout << "=============" << endl;
+            cout << "Discard Phase!" << endl;
+            cout << "=============" << endl;
+            cout << endl;
 
             if (table->getPlayer(i)->getHand().size() == 0) {
                 cout << "Skipping discard phase because hand is empty." << endl;
@@ -216,6 +235,11 @@ int main() {
                 // Draw card and place it in the trade area
                 *tradeArea += discard->pickUp();
             }
+
+            cout << "=============" << endl;
+            cout << "Trade Phase!" << endl;
+            cout << "=============" << endl;
+            cout << endl;
 
             // Display trade area
             cout << *table;
