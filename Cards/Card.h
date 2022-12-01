@@ -12,7 +12,17 @@ using namespace std;
 
 class Card {
 private:
+    /**
+     * Private Copy Constructor to restrict Card creation
+     * @param o
+     */
     Card(Card& o) = default;
+
+    /**
+     * Private = operator to restrict Card creation
+     * @param o
+     * @return
+     */
     Card& operator=(Card& o) = default;
     bool isAllocated = false;
 public:

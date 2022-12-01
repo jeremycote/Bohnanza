@@ -61,6 +61,11 @@ public:
      * @return
      */
     Card *top() const {
+
+        if (empty()) {
+            throw out_of_range("Discard pile is empty");
+        }
+
         return back();
     }
 

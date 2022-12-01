@@ -362,8 +362,13 @@ public:
 
             out << "): ";
 
-            in.clear();
-            in >> chainIndex;
+            try {
+                string response;
+                getline(in, response);
+                chainIndex = stoi(response);
+            } catch (invalid_argument& e) {
+                out << "Invalid choice." << endl;
+            }
             out << endl;
         }
 

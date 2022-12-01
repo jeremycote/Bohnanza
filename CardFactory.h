@@ -68,6 +68,7 @@ private:
             nCards++;
         }
 
+        resetAllocation();
     }
 public:
     /**

@@ -24,17 +24,16 @@ int ChainBase::spacer = 3;
 
 CardFactory CardFactory::instance = CardFactory();
 
-bool askYesNo(string question) {
-    char playChar = ' ';
+bool askYesNo(const string& question) {
 
-    while (playChar != 'y' && playChar != 'n') {
+    string answer = " ";
+
+    while ((answer[0] != 'y' && answer[0] != 'n')) {
         cout << question << " (yes/no): ";
-
-        cin.clear();
-        cin >> playChar;
+        getline(cin, answer);
         cout << endl;
     }
-    return playChar == 'y';
+    return answer[0] == 'y';
 }
 
 int main() {
@@ -44,7 +43,7 @@ int main() {
     if (askYesNo("Would you like to resume an existing game?")) {
         cout << "Enter save file name: ";
         string filename;
-        cin >> filename;
+        getline(cin, filename);
 
         ifstream file(filename, ifstream::in);
 
@@ -71,7 +70,6 @@ int main() {
     DiscardPile* discard = table->getDiscardPile();
 
     const int nPlayers = 2;
-    Player* players[nPlayers]{table->getPlayer(0), table->getPlayer(1)};
 
     // Game loop. Game ends when the deck is empty.
     while (!deck->empty()) {
@@ -80,7 +78,7 @@ int main() {
 
             cout << "Enter filename: ";
             string filename;
-            cin >> filename;
+            getline(cin, filename);
             cout << endl;
 
             ofstream file(filename, ifstream::out);
@@ -101,27 +99,31 @@ int main() {
 
         // For each player
         for (int i = 0; i < nPlayers; i++) {
+
+            cout << "It's " << table->getPlayer(i)->getName() << " turn!" << endl;
+
             // Display table
             cout << *table;
+            table->getPlayer(i)->printHand(cout, true);
 
             // Ask player to buy a 3rd bean field if they can afford it and don't have one.
-            if (players[i]->getMaxNumChains() == 2 && players[i]->getNumCoins() >= 3 && askYesNo("Would you like to purchase a third bean field?")) {
-                players[i]->buyThirdChain();
+            if (table->getPlayer(i)->getMaxNumChains() == 2 && table->getPlayer(i)->getNumCoins() >= 3 && askYesNo("Would you like to purchase a third bean field?")) {
+                table->getPlayer(i)->buyThirdChain();
                 cout << *table;
             }
 
             // Player draws top card from deck
             try {
                 Card* card = deck->draw();
-                cout << players[i]->getName() << " drew a " << card->getName() << endl;
-                players[i]->getHand() += card;
+                cout << table->getPlayer(i)->getName() << " drew a " << card->getName() << endl;
+                table->getPlayer(i)->getHand() += card;
             } catch (DeckEmptyException& e) {
                 cout << "Warning. Deck is empty" << endl;
             }
 
 
             // Display hand
-            players[i]->printHand(cout, true);
+            table->getPlayer(i)->printHand(cout, true);
 
             // If trade area is not empty
             if (tradeArea->numCards() > 0) {
@@ -134,62 +136,68 @@ int main() {
                         string cardNameToPickup;
 
                         cout << "Enter card name to pickup (Enter 'STOP' to stop trading): ";
-                        cin >> cardNameToPickup;
+                        getline(cin, cardNameToPickup);
                         cout << endl;
 
                         if (tradeArea->contains(cardNameToPickup)) {
-                            players[i]->playOnChain(players[i]->selectChain(cout,cin), tradeArea->trade(cardNameToPickup));
+                            table->getPlayer(i)->playOnChain(table->getPlayer(i)->selectChain(cout,cin), tradeArea->trade(cardNameToPickup));
 
                             // Display trade area
                             cout << *table;
                         } else if (cardNameToPickup == "STOP" || cardNameToPickup == "stop" || cardNameToPickup == "s" || cardNameToPickup == "S" || askYesNo("Trade area does not contain card, would you like to stop trading?")) {
-
-                            while (tradeArea->numCards() > 0) {
-                                *discard += tradeArea->getCard();
-                            }
-
                             continueTrading = false;
                         }
                     }
                 }
+
+                while (tradeArea->numCards() > 0) {
+                    *discard += tradeArea->getCard();
+                }
             }
 
+            // Play up to 2 bean cards
             for (int play = 0; play < 2; play++) {
 
-                if (players[i]->getHand().size() == 0) {
+                if (table->getPlayer(i)->getHand().size() == 0) {
                     cout << "Skipping planting phase. Hand is empty." << endl;
                     break;
                 }
 
                 cout << "Next card to play is: ";
-                players[i]->printHand(cout, false);
+                table->getPlayer(i)->printHand(cout, false);
 
-                if (play == 1 && players[i]->getHand().size() > 0) {
+                if (play == 1 && table->getPlayer(i)->getHand().size() > 0) {
                     if (!askYesNo("Would you like to plant a second bean?")) {
                         // If they choose no, break out of for loop
                         break;
                     }
                 }
 
-                int chainIndex = players[i]->selectChain(cout, cin);
-                players[i]->playOnChain(chainIndex, players[i]->getHand().play());
+                int chainIndex = table->getPlayer(i)->selectChain(cout, cin);
+                table->getPlayer(i)->playOnChain(chainIndex, table->getPlayer(i)->getHand().play());
             }
 
-            players[i]->printHand(cout, true);
+            table->getPlayer(i)->printHand(cout, true);
 
-            if (players[i]->getHand().size() == 0) {
+            if (table->getPlayer(i)->getHand().size() == 0) {
                 cout << "Skipping discard phase because hand is empty." << endl;
             } else if (askYesNo("Would you like to discard a card?")) {
                 int idx = -1;
-                while (idx < 0 || idx > players[i]->getHand().size()) {
+                while (idx < 0 || idx > table->getPlayer(i)->getHand().size()) {
                     cout << "Select card to discard (Enter '0' to cancel): ";
-                    cin >> idx;
+                    try {
+                        string response;
+                        getline(cin, response);
+                        idx = stoi(response);
+                    } catch (invalid_argument& e) {
+                        cout << "Invalid choice." << endl;
+                    }
                     cout << endl;
                 }
                 idx--;
 
-                if (i >= 0) {
-                    *discard += players[i]->getHand()[idx];
+                if (idx >= 0) {
+                    *discard += table->getPlayer(i)->getHand()[idx];
                 }
             }
 
@@ -204,7 +212,7 @@ int main() {
 
 
             // While top card of discard matches card in trade area
-            while (tradeArea->legal(discard->top())) {
+            while (!discard->empty() && tradeArea->legal(discard->top())) {
                 // Draw card and place it in the trade area
                 *tradeArea += discard->pickUp();
             }
@@ -221,11 +229,11 @@ int main() {
                     string cardNameToPickup;
 
                     cout << "Enter card name to pickup (Enter 'STOP' to stop trading): ";
-                    cin >> cardNameToPickup;
+                    getline(cin, cardNameToPickup);
                     cout << endl;
 
                     if (tradeArea->contains(cardNameToPickup)) {
-                        players[i]->playOnChain(players[i]->selectChain(cout,cin), tradeArea->trade(cardNameToPickup));
+                        table->getPlayer(i)->playOnChain(table->getPlayer(i)->selectChain(cout,cin), tradeArea->trade(cardNameToPickup));
 
                         // Display trade area
                         cout << *table;
@@ -239,7 +247,7 @@ int main() {
 
             try {
                 for (int idx = 0; idx < 2; idx++) {
-                    players[i]->getHand() += deck->draw();
+                    table->getPlayer(i)->getHand() += deck->draw();
                 }
             } catch (DeckEmptyException& e) {
                 // Do nothing since cards are no longer used
@@ -250,17 +258,17 @@ int main() {
     int winner = -1;
 
     for (int i = 0; i < nPlayers; i++) {
-        if (table->win(players[i]->getName())) {
+        if (table->win(table->getPlayer(i)->getName())) {
             winner = i;
         }
     }
 
     if (winner == -1) {
-        cout << "It's a tie! Both players have " << players[0]->getNumCoins() << " coins!" << endl;
+        cout << "It's a tie! Both players have " << table->getPlayer(0)->getNumCoins() << " coins!" << endl;
     } else {
-        cout << players[winner]->getName() << " wins!" << endl;
-        for (auto & player : players) {
-            cout << player->getName() << " has " << player->getNumCoins() << " coins." << endl;
+        cout << table->getPlayer(winner)->getName() << " wins!" << endl;
+        for (int i = 0; i < nPlayers; i++) {
+            cout << table->getPlayer(i)->getName() << " has " << table->getPlayer(i)->getNumCoins() << " coins." << endl;
         }
     }
 

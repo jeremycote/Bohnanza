@@ -23,8 +23,6 @@ private:
     DiscardPile discardPile;
     TradeArea tradeArea;
 
-    Player* currentPlayer;
-
 public:
 
     /**
@@ -35,14 +33,18 @@ public:
         string p1Name;
         string p2Name;
 
-        cin.ignore();
-
         cout << "Enter P1 Name: ";
         getline(cin, p1Name);
+
+        // Only take first word as name
+        p1Name = p1Name.substr(0, p1Name.find(' '));
         cout << endl;
 
         cout << endl << "Enter P2 Name: ";
         getline(cin, p2Name);
+
+        // Only take first word as name
+        p2Name = p2Name.substr(0, p2Name.find(' '));
         cout << endl;
 
         p1 = Player(p1Name);
@@ -111,10 +113,6 @@ public:
         return false;
     }
 
-    void printHand(bool entireHand) {
-        currentPlayer->printHand(cout, entireHand);
-    }
-
     void saveTable(ostream& out) {
         p1.print(out, true);
         p1.printHand(out, true);
@@ -151,10 +149,6 @@ public:
         }
 
         return idx == 0 ? &p1 : &p2;
-    }
-
-    void setCurrentPlayer(Player* p) {
-        this->currentPlayer = p;
     }
 };
 
