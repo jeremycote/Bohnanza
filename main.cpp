@@ -24,6 +24,11 @@ int ChainBase::spacer = 3;
 
 CardFactory CardFactory::instance = CardFactory();
 
+/**
+ * Ask user a yes or no question and return answer
+ * @param question
+ * @return
+ */
 bool askYesNo(const string& question) {
 
     string answer = " ";

@@ -7,6 +7,9 @@
 
 #include <exception>
 
+/**
+ * Exception thrown when the deck is empty
+ */
 class DeckEmptyException : public std::exception {
     const char * what() const noexcept override {
         return "Deck Empty Exception";

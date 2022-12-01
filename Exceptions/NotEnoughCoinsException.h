@@ -7,6 +7,9 @@
 
 #include <exception>
 
+/**
+ * Exception thrown when the user does not have enough coins to complete action.
+ */
 class NotEnoughCoinsException : public std::exception {
     const char * what() const noexcept override {
         return "Not Enough Coins Exception";
