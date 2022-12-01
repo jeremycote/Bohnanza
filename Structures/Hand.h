@@ -14,9 +14,7 @@
 
 using namespace std;
 
-class Hand {
-private:
-    list<Card*> cards;
+class Hand : public queue<Card*, list<Card*>> {
 public:
 
     /**
@@ -32,12 +30,12 @@ public:
     Hand(istream& in, CardFactory* factory) {
         string word;
         while (in >> word) {
-            cards.push_back(factory->getUnallocatedCard(word));
+            push(factory->getUnallocatedCard(word));
         }
     }
 
     Hand& operator+=(Card* card) {
-        cards.push_back(card);
+        push(card);
         return *this;
     }
 
@@ -47,10 +45,10 @@ public:
      */
     Card* play() {
         // Get the card at the front of the queue
-        Card* card = cards.front();
+        Card* card = front();
 
         // Remove the card from the queue
-        cards.pop_front();
+        pop();
 
         // Return the card
         return card;
@@ -60,17 +58,14 @@ public:
      * Return the next card to be played.
      */
     Card* top() {
-        return cards.front();
+        return front();
     }
 
     Card* operator[](int i) {
-        auto front = cards.begin();
+
+        auto front = c.begin();
         advance(front, i);
         return *front;
-    }
-
-    int size() {
-        return cards.size();
     }
 
     friend ostream& operator<<(ostream& out, const Hand& hand);
@@ -80,8 +75,8 @@ ostream& operator<<(ostream& out, const Hand& hand) {
 
     out << "Hand:";
 
-    auto it = hand.cards.begin();
-    for (it; it != hand.cards.end(); ++it) {
+    auto it = hand.c.begin();
+    for (it; it != hand.c.end(); ++it) {
         out << " " << (*it)->getName();
     }
 
